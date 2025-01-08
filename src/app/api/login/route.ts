@@ -24,21 +24,3 @@ export async function POST(req: Request) {
 
   return NextResponse.json({ success: false, message: "Invalid credentials" }, { status: 401 })
 }
-
-// import { NextResponse } from "next/server"
-
-// export async function POST(req: Request) {
-//   const { username, password } = await req.json()
-
-//   const adminUsername = process.env.ADMIN_USERNAME
-//   const adminPassword = process.env.ADMIN_PASSWORD
-
-//   if (username === adminUsername && password === adminPassword) {
-//     const token = "admin-session-token" // Replace with a JWT if needed
-//     const response = NextResponse.json({ success: true })
-//     response.cookies.set("auth_token", token, { httpOnly: true, path: "/", secure: true })
-//     return response
-//   }
-
-//   return NextResponse.json({ success: false, message: "Invalid credentials" }, { status: 401 })
-// }
