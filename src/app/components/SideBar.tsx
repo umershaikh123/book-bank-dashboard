@@ -25,24 +25,24 @@ const SideBar = () => {
       <div className="">
         <h1 className="text-4xl  font-bold">Book Bank</h1>
       </div>
-      <div className="flex flex-col space-y-10 pb-32">
-        <Link href={"/admin/books"} className="flex items-center space-x-2">
+      <div className="flex flex-col space-y-10 pb-32 ">
+        <Link href={"/admin/books?booksCategory=all"} className="flex items-center space-x-2 ">
           <Image src={bookIcon} width={35} height={35} alt={`Books icon`} />
 
           <div className="flex flex-col">
-            <div className="text-xl flex -mb-1"> Books </div>
+            <div className="text-xl flex -mb-1 hover:text-2xl transition-all duration-150 ease-in"> Books </div>
             <div
               className={`${
                 path === "/admin/books" ? "opacity-100" : "opacity-0"
-              }  bg-[var(--secondary)] transition-all duration-300 h-1 mt-1 `}
+              }  bg-[var(--secondary)] transition-all duration-150 h-1 mt-1 `}
             ></div>
           </div>
         </Link>
 
-        <Link href={"/admin/request"} className="flex items-center space-x-2">
+        <Link href={"/admin/request"} className="flex items-center space-x-2  ">
           <Image src={requestIcon} width={35} height={35} alt={`requestIcon `} className="-mt-1" />
           <div className="flex flex-col">
-            <div className="text-xl flex -mb-1"> Request </div>
+            <div className="text-xl flex -mb-1 hover:text-2xl transition-all duration-150 ease-in"> Request </div>
             <div
               className={`${
                 path === "/admin/request" ? "opacity-100" : "opacity-0"
@@ -51,14 +51,14 @@ const SideBar = () => {
           </div>
         </Link>
 
-        <Link href={"/admin/monitor"} className="flex items-center space-x-2">
+        <Link href={"/admin/monitor"} className="flex items-center space-x-2  ">
           <Image src={monitoringIcon} width={35} height={35} alt={`monitoringIcon`} className="-mt-3" />
           <div className="flex flex-col">
-            <div className="text-xl flex -mb-2"> Monitor </div>
+            <div className="text-xl flex -mb-2 hover:text-2xl transition-all duration-150 ease-in"> Monitor </div>
             <div
               className={`${
                 path === "/admin/monitor" ? "opacity-100" : "opacity-0"
-              }  bg-[var(--secondary)] transition-all duration-300 h-1 mt-2`}
+              }  bg-[var(--secondary)] transition-all duration-150 h-1 mt-2`}
             ></div>
           </div>
         </Link>

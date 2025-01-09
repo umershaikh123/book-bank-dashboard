@@ -35,7 +35,7 @@ export default function LoginPage() {
     const data = await res.json()
     console.log("data", data)
     if (res.ok) {
-      window.location.href = "/admin/books"
+      window.location.href = "/admin/books?booksCategory=all"
       toast.info("Login Successful")
     } else {
       toast.error(`${data.message}`)

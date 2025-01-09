@@ -12,7 +12,7 @@ export async function middleware(req: NextRequest) {
 
   // Guard condition to avoid redirect loops
   const isLoginPage = currentPath === "/login"
-  const isAdminPage = currentPath.startsWith("/admin/books")
+  const isAdminPage = currentPath.startsWith("/admin/books?booksCategory=all")
   const isHomePage = currentPath === "/"
 
   if (!authToken) {
@@ -33,7 +33,7 @@ export async function middleware(req: NextRequest) {
 
     // If authenticated and on login page, redirect to admin page
     if (isLoginPage || isHomePage) {
-      return NextResponse.redirect(new URL("/admin/books", req.url))
+      return NextResponse.redirect(new URL("/admin/books?booksCategory=all", req.url))
     }
 
     // Allow access to protected routes

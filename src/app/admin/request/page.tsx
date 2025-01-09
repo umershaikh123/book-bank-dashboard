@@ -1,9 +1,9 @@
 "use client"
-
+import Header from "@/app/components/Header"
 export default function Page() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white rounded-[2rem]   ">
-      <h1 className="text-3xl font-bold mb-6">Welcome to request Page</h1>
+    <div className="flex flex-col   min-h-screen bg-white rounded-[2rem]   ">
+      <Header page={"Request"} searchBarToggle={false} />
     </div>
   )
 }
