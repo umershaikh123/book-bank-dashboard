@@ -33,7 +33,12 @@ export default function AdminDashboard() {
     queryFn: fetchUsers,
   })
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading)
+    return (
+      <div className="h-screen w-full flex justify-center items-center">
+        <div className="loader"></div>
+      </div>
+    )
   if (error instanceof Error) return <div>Error: {error.message}</div>
   const handleLogout = async () => {
     await fetch("/api/logout", {

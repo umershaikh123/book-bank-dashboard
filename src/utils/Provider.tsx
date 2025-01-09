@@ -2,7 +2,8 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
-// Create a client
+import { ToastContainer } from "react-toastify"
+
 const queryClient = new QueryClient()
 
 export default function QueryProvider({
@@ -11,9 +12,22 @@ export default function QueryProvider({
   children: React.ReactNode
 }>) {
   return (
-    // Provide the client to your App
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
+      <ToastContainer
+        theme="light"
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        toastStyle={{ backgroundColor: "var(--background)" }}
+        toastClassName="custom-toast"
+      />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       {children}
     </QueryClientProvider>
   )
