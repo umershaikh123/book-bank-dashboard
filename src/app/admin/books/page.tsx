@@ -10,7 +10,7 @@ import "tippy.js/animations/scale.css"
 import "tippy.js/themes/translucent.css"
 import Grid from "@mui/material/Grid2"
 import Image from "next/image"
-
+import { Suspense } from "react"
 const images = [
   "/Images/booksData/image1.svg",
   "/Images/booksData/image2.svg",
@@ -26,7 +26,9 @@ export default function Page() {
   return (
     <div className="flex flex-col   min-h-screen bg-white rounded-[2rem]   ">
       <Header page={"Books"} searchBarToggle={true} />
-      <ButtonRow />
+      <Suspense>
+        <ButtonRow />
+      </Suspense>
 
       <div className="px-16 my-8">
         <Grid

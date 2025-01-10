@@ -3,7 +3,7 @@ import { neon } from "@neondatabase/serverless"
 import { verifyToken } from "@/utils/verifyToken"
 
 const sql = neon(process.env.DATABASE_URL || "")
-
+export const dynamic = "force-dynamic"
 export async function DELETE(req: Request) {
   try {
     // Verify JWT
