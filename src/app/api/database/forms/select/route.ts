@@ -11,15 +11,15 @@ export async function GET(req: Request) {
     await verifyToken(authHeader || "")
 
     // Fetch books from the database
-    const books = await sql`
+    const forms = await sql`
       SELECT 
       *
-      FROM books
+      FROM forms
     `
 
-    return NextResponse.json({ success: true, data: books }, { status: 200 })
+    return NextResponse.json({ success: true, data: forms }, { status: 200 })
   } catch (err) {
-    console.error("Error fetching books:", err)
+    console.error("Error fetching forms:", err)
     return NextResponse.json({ success: false, error: err }, { status: 401 })
   }
 }

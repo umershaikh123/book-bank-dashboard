@@ -7,9 +7,10 @@ export async function verifyToken(authHeader: string | undefined) {
     throw new Error("Authorization token missing or invalid")
   }
   const token = authHeader.split(" ")[1]
+
   try {
     const { payload } = await jwtVerify(token, SECRET_KEY)
-    return payload // Contains user data
+    return payload
   } catch (err) {
     throw new Error("Invalid or expired token")
   }

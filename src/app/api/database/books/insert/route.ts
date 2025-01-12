@@ -1,24 +1,50 @@
 import { NextResponse } from "next/server"
 import { neon } from "@neondatabase/serverless"
 import { verifyToken } from "@/utils/verifyToken"
+import { z } from "zod"
+
+// Define Zod validation schema
+const bookSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  author: z.string().min(1, "Author is required"),
+  category: z.string().min(1, "Category is required"),
+  totalCopies: z.number().min(1, "Total copies must be at least 1"),
+  availableCopies: z.number().min(0, "Available copies cannot be negative"),
+  price: z.number().min(0, "Price cannot be negative"),
+  image: z.string().url("Image URL must be a valid URL"),
+})
 
 const sql = neon(process.env.DATABASE_URL || "")
 export const dynamic = "force-dynamic"
+
 export async function POST(req: Request) {
   try {
-    // Verify JWT
+    // Verify JWT token
     const authHeader = req.headers.get("authorization")
     await verifyToken(authHeader || "")
 
+    // Parse request body
     const body = await req.json()
-    const { isbn, title, author, category, totalCopies, availableCopies, price, subject, gradeLevel, image } = body
 
+    // Validate incoming data using Zod
+    const parsedData = bookSchema.safeParse(body)
+
+    if (!parsedData.success) {
+      // If validation fails, return an error response
+      return NextResponse.json({ success: false, error: parsedData.error.errors }, { status: 400 })
+    }
+
+    const { title, author, category, totalCopies, availableCopies, price, image } = parsedData.data
+
+    // Insert the validated book into the database
     await sql`
-      INSERT INTO books (isbn, title, author, category, total_copies, available_copies, price, subject, grade_level, image)
-      VALUES (${isbn}, ${title}, ${author}, ${category}, ${totalCopies}, ${availableCopies}, ${price}, ${subject}, ${gradeLevel}, ${image})
+      INSERT INTO books (title, author, category, total_copies, available_copies, price, image)
+      VALUES (${title}, ${author}, ${category}, ${totalCopies}, ${availableCopies}, ${price}, ${image})
     `
+
     return NextResponse.json({ success: true, message: "Book inserted successfully" }, { status: 200 })
   } catch (err) {
-    return NextResponse.json({ success: false, error: err }, { status: 401 })
+    console.error(err)
+    return NextResponse.json({ success: false, error: "Internal Server Error" }, { status: 500 })
   }
 }
