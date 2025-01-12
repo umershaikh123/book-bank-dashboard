@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Lottie from "lottie-react"
+import { useMutation } from "@tanstack/react-query"
 // @ts-ignore
 import booksAnimation from "/public/animations/books.json"
 import logo from "/public/Images/logo.svg"
@@ -19,27 +20,50 @@ import FormControl from "@mui/material/FormControl"
 import PersonIcon from "@mui/icons-material/Person"
 
 import { toast } from "react-toastify"
+
+const login = async (credentials: { username: string; password: string }) => {
+  const response = await fetch("/api/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(credentials),
+  })
+
+  if (!response.ok) {
+    const errorData = await response.json()
+    throw new Error(errorData.message || "Invalid credentials")
+  }
+
+  const data = await response.json()
+
+  return data.token
+}
+
 export default function LoginPage() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    })
-
-    const data = await res.json()
-    console.log("data", data)
-    if (res.ok) {
-      window.location.href = "/admin/books?booksCategory=all"
+  const mutation = useMutation({
+    mutationFn: login,
+    onSuccess: (token: string) => {
+      // Store the JWT token securely
+      localStorage.setItem("auth_token", token)
+      console.log("Login Successful")
       toast.info("Login Successful")
-    } else {
-      toast.error(`${data.message}`)
-    }
+
+      window.location.href = "/admin/books?booksCategory=all"
+    },
+    onError: (error: any) => {
+      console.log("Login failed", error.message)
+      toast.error(error.message || "Login failed")
+    },
+  })
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const credentials = { username, password }
+    mutation.mutate(credentials)
   }
 
   return (

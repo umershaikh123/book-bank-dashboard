@@ -17,6 +17,7 @@ const SideBar = () => {
     await fetch("/api/logout", {
       method: "POST",
     })
+    localStorage.removeItem("auth_token")
     toast.info("Logging Out")
     router.push("/login")
   }

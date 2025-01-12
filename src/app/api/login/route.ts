@@ -16,7 +16,7 @@ export async function POST(req: Request) {
       .setIssuedAt()
       .setExpirationTime("24h")
       .sign(SECRET_KEY)
-    const response = NextResponse.json({ success: true })
+    const response = NextResponse.json({ success: true, token: token })
     console.log("token", token)
     response.cookies.set("auth_token", token, { httpOnly: true, path: "/", secure: true })
     return response

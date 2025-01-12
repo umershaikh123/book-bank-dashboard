@@ -16,6 +16,11 @@ const bookSchema = z.object({
 
 const sql = neon(process.env.DATABASE_URL || "")
 export const dynamic = "force-dynamic"
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+}
 
 export async function POST(req: Request) {
   try {
@@ -26,10 +31,13 @@ export async function POST(req: Request) {
     // Parse request body
     const body = await req.json()
 
+    console.log("body", body)
+
     // Validate incoming data using Zod
     const parsedData = bookSchema.safeParse(body)
 
     if (!parsedData.success) {
+      console.log("failed to parse data", parsedData.error.errors)
       // If validation fails, return an error response
       return NextResponse.json({ success: false, error: parsedData.error.errors }, { status: 400 })
     }

@@ -11,6 +11,7 @@ import "tippy.js/themes/translucent.css"
 import Grid from "@mui/material/Grid2"
 import Image from "next/image"
 import { Suspense } from "react"
+import { AddBookPopover } from "@/app/components/Popover"
 const images = [
   "/Images/booksData/image1.svg",
   "/Images/booksData/image2.svg",
@@ -23,12 +24,17 @@ const images = [
 ]
 
 export default function Page() {
+  const [open, setOpen] = React.useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
   return (
     <div className="flex flex-col   min-h-screen bg-white rounded-[2rem]   ">
       <Header page={"Books"} searchBarToggle={true} />
       <Suspense>
-        <ButtonRow />
+        <ButtonRow handleOpen={handleOpen} />
       </Suspense>
+
+      <AddBookPopover open={open} handleClose={handleClose} />
 
       <div className="px-16 my-8">
         <Grid
@@ -53,7 +59,7 @@ export default function Page() {
   )
 }
 
-function ButtonRow() {
+function ButtonRow({ handleOpen }: { handleOpen: any }) {
   const searchParams = useSearchParams()
   const booksCategory = searchParams.get("booksCategory")
   return (
@@ -129,7 +135,10 @@ function ButtonRow() {
       </div>
 
       <Tippy content={`Add Book in the Database`} placement="bottom" animateFill={true} animation={"scale"} theme="translucent">
-        <button className=" bg-[var(--secondary)] text-white font-bold rounded-lg px-4 py-2 flex items-center">
+        <button
+          onClick={handleOpen}
+          className=" bg-[var(--secondary)] text-white font-bold rounded-lg px-4 py-2 flex items-center"
+        >
           <AddIcon sx={{ color: "white", mr: "6px" }} />
           Add Book
         </button>

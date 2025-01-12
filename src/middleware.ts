@@ -5,10 +5,8 @@ import { jwtVerify } from "jose"
 const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET || "your-secret-key")
 
 export async function middleware(req: NextRequest) {
-  console.log("Running middleware")
-
   const authToken = req.cookies.get("auth_token")?.value
-  console.log("jwt token", authToken)
+  // console.log("jwt token", authToken)
   const currentPath = req.nextUrl.pathname
 
   // Guard condition to avoid redirect loops
