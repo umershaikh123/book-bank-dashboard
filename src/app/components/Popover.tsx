@@ -28,28 +28,6 @@ const style = {
 
 const API_URL = "/api/database/books/insert"
 
-const insertBook = async (bookData: FormData) => {
-  const token = localStorage.getItem("auth_token")
-
-  console.log("bookData", bookData)
-
-  const response = await fetch(API_URL, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    body: bookData,
-  })
-
-  if (!response.ok) {
-    const errorData = await response.json()
-    console.log("Failed to insert book ")
-    throw new Error(errorData.error || "Failed to insert book")
-  }
-
-  return response.json()
-}
-
 export const AddBookPopover = ({ open, handleClose }: { open: boolean; handleClose: any }) => {
   const [formData, setFormData] = useState({
     title: "",
@@ -61,24 +39,77 @@ export const AddBookPopover = ({ open, handleClose }: { open: boolean; handleClo
     image: null,
   })
 
+  const handleSubmitMutation = async (formData: {
+    image: File | null
+    author: string
+    title: string
+    category: string
+    totalCopies: string
+    availableCopies: string
+    price: string
+  }) => {
+    const { image, author, title, category, totalCopies, availableCopies, price } = formData
+
+    const token = localStorage.getItem("auth_token")
+    let imageUrl = ""
+
+    if (image) {
+      // Upload image to Pinata
+      imageUrl = await uploadImageToIPFS(image)
+      console.log("imageUrl", imageUrl)
+    }
+
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: title,
+        author: author,
+        category: category,
+        totalCopies: parseInt(totalCopies, 10),
+        availableCopies: parseInt(availableCopies, 10),
+        price: parseFloat(price),
+        image: imageUrl,
+      }),
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.error || "Failed to insert book")
+    }
+
+    return response.json()
+  }
   const mutation = useMutation({
-    mutationFn: insertBook,
-    onMutate: async (variables) => {
-      toast.info("Updating Database")
-      console.log("Starting mutation with data:", variables)
+    mutationFn: handleSubmitMutation,
+    onMutate: () => {
+      toast.loading("Updating Database...", {
+        toastId: "submit-toast",
+        icon: "⏳" as any,
+      })
     },
-    onSuccess: (data) => {
-      console.log("Book added successfully ", data.message)
-      toast.success("Book added successfully")
-      handleClose()
+    onSuccess: () => {
+      toast.update("submit-toast", {
+        render: <div>Data Submitted! </div>,
+        type: "success",
+        icon: "✅" as any,
+        autoClose: 5000,
+        isLoading: false,
+      })
     },
     onError: (error: any) => {
-      console.error("Failed to add book ", error.message)
-      toast.error("Failed to add book")
+      toast.update("submit-toast", {
+        render: `Failed To Submit Form: ${error.message}`,
+        type: "error",
+        icon: "❌" as any,
+        autoClose: 5000,
+        isLoading: false,
+      })
     },
-    onSettled: () => {
-      console.log("Mutation has settled (success or failure)")
-    },
+    onSettled: () => {},
   })
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value, files } = e.target
@@ -88,63 +119,19 @@ export const AddBookPopover = ({ open, handleClose }: { open: boolean; handleClo
     }))
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const { image, author, title, category, totalCopies, availableCopies, price } = formData
-    try {
-      const token = localStorage.getItem("auth_token")
-      const pendingToastId = toast.loading("Updating Database...", {
-        icon: "⏳" as any,
-      })
-      let imageUrl = ""
-      if (image) {
-        // Upload image to Pinata
-
-        imageUrl = await uploadImageToIPFS(image as File)
-        console.log("imageUrl", imageUrl)
-      }
-      console.log("formData", formData)
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          title: title,
-          author: author,
-          category: category,
-          totalCopies: parseInt(totalCopies, 10),
-          availableCopies: parseInt(availableCopies, 10),
-          price: parseFloat(price),
-          image: imageUrl,
-        }),
-      })
-
-      toast.update(pendingToastId, {
-        render: <div>Data Submitted! </div>,
-        type: "success",
-        icon: "✅" as any,
-        autoClose: 5000,
-        isLoading: false,
-      })
-      if (!response.ok) {
-        const errorData = await response.json()
-        console.log("Failed to insert book ")
-        toast.update(pendingToastId, {
-          render: `Failed To Submit Form`,
-          type: "error",
-          icon: "❌" as any,
-          autoClose: 5000,
-          isLoading: false,
-        })
-        throw new Error(errorData.error || "Failed to insert book")
-      }
-
-      return response.json()
-      // mutation.mutate(bookData)
-    } catch (error) {
-      console.error("Error during form submission:", error)
+    const formData = new FormData(e.target as HTMLFormElement)
+    const parsedData = {
+      image: formData.get("image") as File | null,
+      author: formData.get("author") as string,
+      title: formData.get("title") as string,
+      category: formData.get("category") as string,
+      totalCopies: formData.get("totalCopies") as string,
+      availableCopies: formData.get("availableCopies") as string,
+      price: formData.get("price") as string,
     }
+    mutation.mutate(parsedData)
   }
   return (
     <div>
