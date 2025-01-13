@@ -9,7 +9,7 @@ import Modal from "@mui/material/Modal"
 import CloseIcon from "@mui/icons-material/Close"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import axios from "axios"
+
 import { toast } from "react-toastify"
 import { uploadImageToIPFS } from "../lib/uploadImage"
 const style = {
@@ -99,6 +99,8 @@ export const AddBookPopover = ({ open, handleClose }: { open: boolean; handleClo
         autoClose: 5000,
         isLoading: false,
       })
+
+      handleClose()
     },
     onError: (error: any) => {
       toast.update("submit-toast", {
