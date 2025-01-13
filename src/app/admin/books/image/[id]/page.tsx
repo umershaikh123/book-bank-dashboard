@@ -8,8 +8,9 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import { useSearchParams } from "next/navigation"
 import { Fade } from "@mui/material"
 import { Suspense } from "react"
-import { DeleteBookPopover } from "@/app/components/Popover"
+import { DeleteBookPopover, UpdateBookPopover } from "@/app/components/Popover"
 import { useState } from "react"
+
 const ImagePage = ({ params }: { params: { id: string } }) => {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -17,8 +18,8 @@ const ImagePage = ({ params }: { params: { id: string } }) => {
     title: searchParams.get("title") || "No Title",
     author: searchParams.get("author") || "Unknown Author",
     category: searchParams.get("category") || "N/A",
-    totalCopies: searchParams.get("totalCopies") || "N/A",
-    availableCopies: searchParams.get("availableCopies") || "N/A",
+    totalCopies: parseInt(searchParams.get("totalCopies") || "0", 10),
+    availableCopies: parseInt(searchParams.get("availableCopies") || "0", 10),
     price: searchParams.get("price") || "N/A",
     image: searchParams.get("image") || "/Images/booksData/image1.svg",
   }
@@ -27,6 +28,10 @@ const ImagePage = ({ params }: { params: { id: string } }) => {
   const [openDelete, setOpenDelete] = useState(false)
   const handleOpenDelete = () => setOpenDelete(true)
   const handleCloseDelete = () => setOpenDelete(false)
+
+  const [openUpdate, setOpenUpdate] = useState(false)
+  const handleOpenUpdate = () => setOpenUpdate(true)
+  const handleCloseUpdate = () => setOpenUpdate(false)
 
   return (
     <Suspense
@@ -39,6 +44,8 @@ const ImagePage = ({ params }: { params: { id: string } }) => {
       <div className="flex flex-col h-screen bg-gradient-to-b from-yellow-50 to-white rounded-[2rem] overflow-y-clip ">
         <Header page={"Books"} searchBarToggle={true} />
         <DeleteBookPopover handleClose={handleCloseDelete} open={openDelete} bookTitle={bookDetails.title} />
+        <UpdateBookPopover handleClose={handleCloseUpdate} open={openUpdate} booksData={bookDetails} />
+
         <Fade in={true} timeout={300}>
           <div className="">
             <button
@@ -80,7 +87,10 @@ const ImagePage = ({ params }: { params: { id: string } }) => {
                     </p>
                   </div>
                   <div className="flex justify-center items-center w-full space-x-6 text-white font-semibold">
-                    <button className="bg-[var(--secondary)] border-2 transition-all duration-300 ease-in-out border-[var(--secondary)] hover:bg-white hover:text-[var(--secondary)] px-6 py-2 flex items-center w-32 justify-center rounded-lg">
+                    <button
+                      onClick={handleOpenUpdate}
+                      className="bg-[var(--secondary)] border-2 transition-all duration-300 ease-in-out border-[var(--secondary)] hover:bg-white hover:text-[var(--secondary)] px-6 py-2 flex items-center w-32 justify-center rounded-lg"
+                    >
                       Edit
                     </button>
                     <button

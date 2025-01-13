@@ -8,8 +8,8 @@ export type BookType = {
   availableCopies: number
   price: string
   image: string
-  created_at: string
-  updated_at: string
+  created_at?: string
+  updated_at?: string
 }
 
 export const fetchBooks = async (booksCategory: string): Promise<BookType[]> => {
