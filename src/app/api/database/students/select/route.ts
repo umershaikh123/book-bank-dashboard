@@ -11,7 +11,7 @@ export async function GET(req: Request) {
     await verifyToken(authHeader || "")
 
     const students = await sql`
-      SELECT   name, father_name, cnic, mobile, email, address, book_history, current_borrowed,
+      SELECT  name, father_name, cnic, mobile, email, address, book_history, current_borrowed,
         TotalBooksBorrowed, TotalBooksReturned, TotalNotReturnedBooks, created_at, updated_at
       FROM students
     `
