@@ -18,6 +18,7 @@ import { useQuery } from "@tanstack/react-query"
 import { queryClient } from "@/utils/Provider"
 import { toast } from "react-toastify"
 import Lottie from "lottie-react"
+import { Fade } from "@mui/material"
 // @ts-ignore
 import notFoundAnimation from "/public/animations/notFound.json"
 export default function Page() {
@@ -68,21 +69,42 @@ export default function Page() {
 
       <div className="px-16 my-8  ">
         {!isLoading && !isError && books && (
-          <Grid container spacing={4} direction="row" sx={{ justifyContent: "start", alignItems: "center" }}>
-            {books.map((book: BookType, index: number) => (
-              <>
-                {book.image.startsWith("https://gateway.pinata.cloud") && (
-                  <Grid key={index}>
-                    <Link href={`/admin/books/image/${index + 1}?booksCategory=${booksCategory}`}>
-                      <>
-                        <img width={200} height={200} src={book.image} alt={book.title} className="" />
-                      </>
-                    </Link>
-                  </Grid>
-                )}
-              </>
-            ))}
-          </Grid>
+          <Fade in={true} timeout={300}>
+            <Grid container spacing={4} direction="row" sx={{ justifyContent: "start", alignItems: "center" }}>
+              {books.map((book: BookType, index: number) => (
+                <>
+                  {book.image.startsWith("https://gateway.pinata.cloud") && (
+                    <Grid key={index}>
+                      <Link
+                        href={{
+                          pathname: `/admin/books/image/${index + 1}?booksCategory=${booksCategory}`,
+                          query: {
+                            title: book.title,
+                            author: book.author,
+                            category: book.category,
+                            totalCopies: book.total_copies,
+                            availableCopies: book.available_copies,
+                            price: book.price,
+                            image: book.image,
+                          },
+                        }}
+                      >
+                        <>
+                          <img
+                            width={200}
+                            height={200}
+                            src={book.image}
+                            alt={book.title}
+                            className=" hover:scale-105 hover:shadow-lg hover:shadow-[var(--secondary)] rounded-3xl transition-all duration-300 ease-in-out"
+                          />
+                        </>
+                      </Link>
+                    </Grid>
+                  )}
+                </>
+              ))}
+            </Grid>
+          </Fade>
         )}
       </div>
     </div>
@@ -108,8 +130,14 @@ function ButtonRow({ handleOpen, booksCategory }: { handleOpen: any; booksCatego
         ))}
       </div>
 
-      <button onClick={handleOpen} className="bg-[var(--secondary)] text-white font-bold rounded-lg px-4 py-2 flex items-center">
-        <AddIcon sx={{ color: "white", mr: "6px" }} />
+      <button
+        onClick={handleOpen}
+        className="bg-[var(--secondary)]  group hover:bg-white border-2 border-transparent hover:text-[var(--secondary)] hover:border-[var(--secondary)] duration-300 ease-in-out transition-all text-white font-bold rounded-lg px-4 py-2 flex items-center"
+      >
+        <AddIcon
+          sx={{ color: "white", mr: "6px" }}
+          className="group-hover:text-[var(--secondary)]  duration-300 ease-in-out transition-all"
+        />
         Add Book
       </button>
     </div>

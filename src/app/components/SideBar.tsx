@@ -34,7 +34,7 @@ const SideBar = () => {
             <div className="text-xl flex -mb-1 hover:text-2xl transition-all duration-150 ease-in"> Books </div>
             <div
               className={`${
-                path === "/admin/books" ? "opacity-100" : "opacity-0"
+                path.startsWith("/admin/books") ? "opacity-100" : "opacity-0"
               }  bg-[var(--secondary)] transition-all duration-150 h-1 mt-1 `}
             ></div>
           </div>
