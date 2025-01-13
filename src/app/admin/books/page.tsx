@@ -83,7 +83,7 @@ export default function Page() {
                       <Grid key={index}>
                         <Link
                           href={{
-                            pathname: `/admin/books/image/${index + 1}?booksCategory=${booksCategory}`,
+                            pathname: `/admin/books/image/${book.title}?booksCategory=${booksCategory}`,
                             query: {
                               title: book.title,
                               author: book.author,

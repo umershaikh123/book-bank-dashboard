@@ -7,6 +7,6 @@ export const booksTable = pgTable("books", {
   category: text("category").notNull(),
   totalCopies: integer("total_copies").notNull(),
   availableCopies: integer("available_copies").notNull(),
-  price: text("price").notNull(),
+  price: integer("price").notNull(),
   image: text("image"),
 })

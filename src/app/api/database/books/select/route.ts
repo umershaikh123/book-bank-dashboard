@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { verifyToken } from "@/utils/verifyToken"
 import { drizzle } from "drizzle-orm/neon-serverless"
-import { neon, neonConfig } from "@neondatabase/serverless"
+
 import { booksTable } from "@/db/schema"
 import { eq } from "drizzle-orm"
 
