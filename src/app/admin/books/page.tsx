@@ -45,69 +45,77 @@ export default function Page() {
   }
 
   return (
-    <div className="flex flex-col   min-h-screen bg-white rounded-[2rem]   ">
-      <Header page={"Books"} searchBarToggle={true} />
-      <Suspense>
-        <ButtonRow handleOpen={handleOpen} booksCategory={booksCategory || "all"} />
-      </Suspense>
-
-      <AddBookPopover open={open} handleClose={handleClose} />
-
-      {isLoading && (
+    <Suspense
+      fallback={
         <div className="justify-center items-center h-[60vh]  w-full flex">
           <div className="loader"></div>
         </div>
-      )}
+      }
+    >
+      <div className="flex flex-col   min-h-screen bg-white rounded-[2rem]   ">
+        <Header page={"Books"} searchBarToggle={true} />
+        <Suspense>
+          <ButtonRow handleOpen={handleOpen} booksCategory={booksCategory || "all"} />
+        </Suspense>
 
-      {!isLoading && books?.length === 0 && (
-        <div className="justify-center items-center h-[60vh]  w-full flex flex-col">
-          <Lottie style={{ height: 600, width: 600 }} animationData={notFoundAnimation} loop={true} />
+        <AddBookPopover open={open} handleClose={handleClose} />
 
-          <h1 className="text-3xl font-bold text-gray-300">Data not Found</h1>
-        </div>
-      )}
-
-      <div className="px-16 my-8  ">
-        {!isLoading && !isError && books && (
-          <Fade in={true} timeout={300}>
-            <Grid container spacing={4} direction="row" sx={{ justifyContent: "start", alignItems: "center" }}>
-              {books.map((book: BookType, index: number) => (
-                <>
-                  {book.image.startsWith("https://gateway.pinata.cloud") && (
-                    <Grid key={index}>
-                      <Link
-                        href={{
-                          pathname: `/admin/books/image/${index + 1}?booksCategory=${booksCategory}`,
-                          query: {
-                            title: book.title,
-                            author: book.author,
-                            category: book.category,
-                            totalCopies: book.total_copies,
-                            availableCopies: book.available_copies,
-                            price: book.price,
-                            image: book.image,
-                          },
-                        }}
-                      >
-                        <>
-                          <img
-                            width={200}
-                            height={200}
-                            src={book.image}
-                            alt={book.title}
-                            className=" hover:scale-105 hover:shadow-lg hover:shadow-[var(--secondary)] rounded-3xl transition-all duration-300 ease-in-out"
-                          />
-                        </>
-                      </Link>
-                    </Grid>
-                  )}
-                </>
-              ))}
-            </Grid>
-          </Fade>
+        {isLoading && (
+          <div className="justify-center items-center h-[60vh]  w-full flex">
+            <div className="loader"></div>
+          </div>
         )}
+
+        {!isLoading && books?.length === 0 && (
+          <div className="justify-center items-center h-[60vh]  w-full flex flex-col">
+            <Lottie style={{ height: 600, width: 600 }} animationData={notFoundAnimation} loop={true} />
+
+            <h1 className="text-3xl font-bold text-gray-300">Data not Found</h1>
+          </div>
+        )}
+
+        <div className="px-16 my-8  ">
+          {!isLoading && !isError && books && (
+            <Fade in={true} timeout={300}>
+              <Grid container spacing={4} direction="row" sx={{ justifyContent: "start", alignItems: "center" }}>
+                {books.map((book: BookType, index: number) => (
+                  <>
+                    {book.image.startsWith("https://gateway.pinata.cloud") && (
+                      <Grid key={index}>
+                        <Link
+                          href={{
+                            pathname: `/admin/books/image/${index + 1}?booksCategory=${booksCategory}`,
+                            query: {
+                              title: book.title,
+                              author: book.author,
+                              category: book.category,
+                              totalCopies: book.total_copies,
+                              availableCopies: book.available_copies,
+                              price: book.price,
+                              image: book.image,
+                            },
+                          }}
+                        >
+                          <>
+                            <img
+                              width={200}
+                              height={200}
+                              src={book.image}
+                              alt={book.title}
+                              className=" hover:scale-105 hover:shadow-lg hover:shadow-[var(--secondary)] rounded-3xl transition-all duration-300 ease-in-out"
+                            />
+                          </>
+                        </Link>
+                      </Grid>
+                    )}
+                  </>
+                ))}
+              </Grid>
+            </Fade>
+          )}
+        </div>
       </div>
-    </div>
+    </Suspense>
   )
 }
 
