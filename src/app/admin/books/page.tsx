@@ -37,7 +37,6 @@ export default function Page() {
     queryKey: ["books", booksCategory],
     queryFn: async () => await fetchBooks(booksCategory || "all"),
     refetchOnWindowFocus: false,
-    refetchIntervalInBackground: false,
   })
 
   if (isError) {
@@ -89,8 +88,8 @@ export default function Page() {
                               title: book.title,
                               author: book.author,
                               category: book.category,
-                              totalCopies: book.total_copies,
-                              availableCopies: book.available_copies,
+                              totalCopies: book.totalCopies,
+                              availableCopies: book.availableCopies,
                               price: book.price,
                               image: book.image,
                             },

@@ -9,9 +9,11 @@ import Modal from "@mui/material/Modal"
 import CloseIcon from "@mui/icons-material/Close"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-
+import { useRouter } from "next/navigation"
 import { toast } from "react-toastify"
 import { uploadImageToIPFS } from "../lib/uploadImage"
+import { queryClient } from "@/utils/Provider"
+import { redirect } from "next/navigation"
 const style = {
   position: "absolute",
   top: "50%",
@@ -99,6 +101,7 @@ export const AddBookPopover = ({ open, handleClose }: { open: boolean; handleClo
         autoClose: 5000,
         isLoading: false,
       })
+      queryClient.invalidateQueries({ queryKey: ["books"] })
 
       handleClose()
     },
@@ -245,6 +248,114 @@ export const AddBookPopover = ({ open, handleClose }: { open: boolean; handleClo
                 </button>
               </div>
             </form>
+          </Box>
+        </Fade>
+      </Modal>
+    </div>
+  )
+}
+
+export const DeleteBookPopover = ({
+  open,
+  handleClose,
+  bookTitle,
+}: {
+  open: boolean
+  handleClose: () => void
+  bookTitle: string
+}) => {
+  const router = useRouter()
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch("/api/database/books/delete", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+        },
+        body: JSON.stringify({ title: bookTitle }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || "Failed to insert book")
+      }
+      return response.json()
+    },
+
+    onSuccess: () => {
+      toast.success("Book deleted successfully!")
+      queryClient.invalidateQueries({ queryKey: ["books"] })
+      handleClose()
+      router.replace("/admin/books?booksCategory=all")
+    },
+    onError: (error: any) => {
+      console.error("Failed to delete book:", error)
+      toast.error("Failed to delete the book.")
+    },
+  })
+
+  const handleDelete = () => {
+    mutation.mutate()
+  }
+  return (
+    <div>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={open}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "60%",
+              transform: "translate(-50%, -50%)",
+              width: 500,
+              height: "30vh",
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              borderRadius: "24px",
+              px: 4,
+              py: 2,
+            }}
+          >
+            <CloseIcon
+              sx={{ fontSize: "30px" }}
+              className="text-[var(--foreground)] absolute top-5 right-5"
+              onClick={handleClose}
+            />
+
+            <div className="flex flex-col justify-evenly items-center h-full">
+              <h1 className="font-bold flex justify-center text-center items-center w-full text-3xl">Delete Book</h1>
+
+              <h1 className="  flex justify-center text-center items-center w-full text-sm">
+                Are you sure you want to delete this book ?
+              </h1>
+
+              <div className="flex justify-center items-center w-full space-x-6 text-white font-semibold">
+                <button
+                  onClick={handleClose}
+                  className="bg-[var(--secondary)] border-2 transition-all duration-300 ease-in-out border-[var(--secondary)] hover:bg-white hover:text-[var(--secondary)] px-6 py-2 flex items-center w-32 justify-center rounded-lg"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="bg-[#FF2F2F] hover:bg-white hover:text-[#FF2F2F] border-2 transition-all duration-300 ease-in-out border-[#FF2F2F] px-6 py-2 flex items-center w-32 justify-center rounded-lg"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
           </Box>
         </Fade>
       </Modal>

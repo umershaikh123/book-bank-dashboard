@@ -8,6 +8,8 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import { useSearchParams } from "next/navigation"
 import { Fade } from "@mui/material"
 import { Suspense } from "react"
+import { DeleteBookPopover } from "@/app/components/Popover"
+import { useState } from "react"
 const ImagePage = ({ params }: { params: { id: string } }) => {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -21,6 +23,11 @@ const ImagePage = ({ params }: { params: { id: string } }) => {
     image: searchParams.get("image") || "/Images/booksData/image1.svg",
   }
 
+  console.log("bookDetails", bookDetails)
+  const [openDelete, setOpenDelete] = useState(false)
+  const handleOpenDelete = () => setOpenDelete(true)
+  const handleCloseDelete = () => setOpenDelete(false)
+
   return (
     <Suspense
       fallback={
@@ -31,7 +38,7 @@ const ImagePage = ({ params }: { params: { id: string } }) => {
     >
       <div className="flex flex-col h-screen bg-gradient-to-b from-yellow-50 to-white rounded-[2rem] overflow-y-clip ">
         <Header page={"Books"} searchBarToggle={true} />
-
+        <DeleteBookPopover handleClose={handleCloseDelete} open={openDelete} bookTitle={bookDetails.title} />
         <Fade in={true} timeout={300}>
           <div className="">
             <button
@@ -76,7 +83,10 @@ const ImagePage = ({ params }: { params: { id: string } }) => {
                     <button className="bg-[var(--secondary)] border-2 transition-all duration-300 ease-in-out border-[var(--secondary)] hover:bg-white hover:text-[var(--secondary)] px-6 py-2 flex items-center w-32 justify-center rounded-lg">
                       Edit
                     </button>
-                    <button className="bg-[#FF2F2F] hover:bg-white hover:text-[#FF2F2F] border-2 transition-all duration-300 ease-in-out border-[#FF2F2F] px-6 py-2 flex items-center w-32 justify-center rounded-lg">
+                    <button
+                      onClick={handleOpenDelete}
+                      className="bg-[#FF2F2F] hover:bg-white hover:text-[#FF2F2F] border-2 transition-all duration-300 ease-in-out border-[#FF2F2F] px-6 py-2 flex items-center w-32 justify-center rounded-lg"
+                    >
                       Delete
                     </button>
                   </div>

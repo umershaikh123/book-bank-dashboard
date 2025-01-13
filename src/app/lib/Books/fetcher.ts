@@ -4,8 +4,8 @@ export type BookType = {
   title: string
   author: string
   category: string
-  total_copies: number
-  available_copies: number
+  totalCopies: number
+  availableCopies: number
   price: string
   image: string
   created_at: string
