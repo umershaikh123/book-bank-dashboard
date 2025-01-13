@@ -38,16 +38,7 @@ const insertBook = async (bookData: FormData) => {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    // body: bookData,
-    body: JSON.stringify({
-      title: "English Class IX Book",
-      author: "sindh board",
-      category: "secondary",
-      totalCopies: "5",
-      availableCopies: "5",
-      price: "400",
-      image: "https://gateway.pinata.cloud/ipfs/QmbjHkgynM9UP3qTtyn9LjMob4fY1KEYykF9ioqawRRYsd",
-    }),
+    body: bookData,
   })
 
   if (!response.ok) {
@@ -99,34 +90,60 @@ export const AddBookPopover = ({ open, handleClose }: { open: boolean; handleClo
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
+    const { image, author, title, category, totalCopies, availableCopies, price } = formData
     try {
+      const token = localStorage.getItem("auth_token")
+      const pendingToastId = toast.loading("Updating Database...", {
+        icon: "⏳" as any,
+      })
       let imageUrl = ""
-      if (formData.image) {
+      if (image) {
         // Upload image to Pinata
-        // imageUrl = await uploadImageToIPFS(formData.image as File)
 
-        imageUrl = "https://gateway.pinata.cloud/ipfs/QmbjHkgynM9UP3qTtyn9LjMob4fY1KEYykF9ioqawRRYsd"
-        toast.success("Image uploaded successfully!")
+        imageUrl = await uploadImageToIPFS(image as File)
+        console.log("imageUrl", imageUrl)
+      }
+      console.log("formData", formData)
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          title: title,
+          author: author,
+          category: category,
+          totalCopies: parseInt(totalCopies, 10),
+          availableCopies: parseInt(availableCopies, 10),
+          price: parseFloat(price),
+          image: imageUrl,
+        }),
+      })
+
+      toast.update(pendingToastId, {
+        render: <div>Data Submitted! </div>,
+        type: "success",
+        icon: "✅" as any,
+        autoClose: 5000,
+        isLoading: false,
+      })
+      if (!response.ok) {
+        const errorData = await response.json()
+        console.log("Failed to insert book ")
+        toast.update(pendingToastId, {
+          render: `Failed To Submit Form`,
+          type: "error",
+          icon: "❌" as any,
+          autoClose: 5000,
+          isLoading: false,
+        })
+        throw new Error(errorData.error || "Failed to insert book")
       }
 
-      // Append all form data
-      const bookData = new FormData()
-      bookData.append("title", formData.title)
-      bookData.append("author", formData.author)
-      bookData.append("category", formData.category)
-      bookData.append("totalCopies", Number(formData.totalCopies).toString())
-      bookData.append("availableCopies", Number(formData.availableCopies).toString())
-      bookData.append("price", Number(formData.price).toString())
-      bookData.append("image", imageUrl)
-      for (let pair of bookData.entries()) {
-        console.log(`${pair[0]}: ${pair[1]}`) // Logs each key-value pair
-      }
-
-      mutation.mutate(bookData)
+      return response.json()
+      // mutation.mutate(bookData)
     } catch (error) {
       console.error("Error during form submission:", error)
-      toast.error("Failed to upload image or insert book")
     }
   }
   return (
