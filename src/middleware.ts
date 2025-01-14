@@ -6,7 +6,7 @@ const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET || "your-secr
 
 export async function middleware(req: NextRequest) {
   const authToken = req.cookies.get("auth_token")?.value
-  // console.log("jwt token", authToken)
+  console.log("jwt token", authToken)
   const currentPath = req.nextUrl.pathname
 
   // Guard condition to avoid redirect loops
