@@ -68,7 +68,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center justify-betweenh-screen bg-[var(--primary)] w-full overflow-y-clip">
-      <div className="w-1/2 flex  items-center justify-between    h-screen flex-col border-r-2 border-[var(--secondary)]">
+      <div className=" w-1/2 sm:flex  hidden  items-center justify-between    h-screen flex-col border-r-2 border-[var(--secondary)]">
         <div className="flex w-full justify-center text-center flex-col items-center space-y-3 mt-10">
           <h1 className="text-6xl text-[var(--secondary)] font-semibold">Book Bank</h1>
           <h1 className="text-xl text-[var(--secondary)] font-semibold">Admin dashboard for ICC book bank</h1>
@@ -79,7 +79,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <div className="w-1/2 flex bg-white  items-center h-screen flex-col  pt-8 ">
+      <div className="sm:w-1/2 w-full flex bg-white  items-center h-screen flex-col  pt-8 ">
         <Image src={logo} width={300} height={300} alt="ICC logo" />
 
         <form onSubmit={handleSubmit} className="flex flex-col space-y-8 py-8  before: ">

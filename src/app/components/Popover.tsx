@@ -13,8 +13,13 @@ import { useRouter } from "next/navigation"
 import { toast } from "react-toastify"
 import { uploadImageToIPFS } from "../lib/uploadImage"
 import { queryClient } from "@/utils/Provider"
-import { redirect } from "next/navigation"
 import { BookType } from "../lib/Books/fetcher"
+import bookIcon from "/public/Images/sidebar/books.svg"
+import requestIcon from "/public/Images/sidebar/request.svg"
+import monitoringIcon from "/public/Images/sidebar/monitoring.svg"
+import Link from "next/link"
+import Image from "next/image"
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -364,6 +369,89 @@ export const DeleteBookPopover = ({
   )
 }
 
+export const MenuPopover = ({ open, handleClose }: { open: boolean; handleClose: () => void }) => {
+  const router = useRouter()
+  const handleLogout = async () => {
+    await fetch("/api/logout", {
+      method: "POST",
+    })
+    localStorage.removeItem("auth_token")
+    toast.info("Logging Out")
+    router.push("/login")
+  }
+
+  return (
+    <div>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        closeAfterTransition
+        onClose={handleClose}
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={open}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "25%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 500,
+              height: "17rem",
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              borderRadius: "24px",
+              px: 4,
+              py: 2,
+            }}
+          >
+            <div className="flex flex-col space-y-6 items-start   ">
+              <Link href={"/admin/books?booksCategory=all"} className="flex items-center space-x-2 ">
+                <Image src={bookIcon} width={35} height={35} alt={`Books icon`} />
+
+                <div className="flex flex-col">
+                  <div className="text-xl flex -mb-1   transition-all duration-150 ease-in"> Books </div>
+                </div>
+              </Link>
+
+              <Link href={"/admin/request?formStatus=Pending"} className="flex items-center space-x-2  ">
+                <Image src={requestIcon} width={35} height={35} alt={`requestIcon `} className=" " />
+                <div className="flex flex-col">
+                  <div className="text-xl flex -mb-1   transition-all duration-150 ease-in"> Request </div>
+                </div>
+              </Link>
+
+              <Link href={"/admin/monitor"} className="flex items-center space-x-2  ">
+                <Image src={monitoringIcon} width={35} height={35} alt={`monitoringIcon`} className=" " />
+                <div className="flex flex-col">
+                  <div className="text-xl flex -mb-2   transition-all duration-150 ease-in"> Monitor </div>
+                </div>
+              </Link>
+
+              <Link href={"/admin/monitor"} className="flex items-center space-x-2  ">
+                <Image src={monitoringIcon} width={35} height={35} alt={`monitoringIcon`} className=" " />
+                <div className="flex flex-col">
+                  <div className="text-xl flex -mb-2 hover:text-2xl transition-all duration-150 ease-in"> New Books </div>
+                </div>
+              </Link>
+
+              <div className=" text-lg font-bold w-full justify-center flex" onClick={handleLogout}>
+                Logout
+              </div>
+            </div>
+          </Box>
+        </Fade>
+      </Modal>
+    </div>
+  )
+}
+
 export const UpdateBookPopover = ({ open, handleClose, booksData }: { open: boolean; handleClose: any; booksData: BookType }) => {
   const [formData, setFormData] = useState({
     title: booksData.title,
@@ -495,7 +583,7 @@ export const UpdateBookPopover = ({ open, handleClose, booksData }: { open: bool
               left: "60%",
               transform: "translate(-50%, -50%)",
               width: 400,
-              height: "95vh",
+              height: "30rem",
               bgcolor: "background.paper",
               boxShadow: 24,
               borderRadius: "24px",

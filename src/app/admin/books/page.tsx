@@ -73,14 +73,20 @@ export default function Page() {
           </div>
         )}
 
-        <div className="px-16 my-8  ">
+        <div className="lg:px-16 px-4 my-8  ">
           {!isLoading && !isError && books && (
             <Fade in={true} timeout={300}>
-              <Grid container spacing={4} direction="row" sx={{ justifyContent: "start", alignItems: "center" }}>
+              <Grid
+                container
+                spacing={4}
+                direction="row"
+                className="w-full"
+                sx={{ justifyContent: "start", alignItems: "center" }}
+              >
                 {books.map((book: BookType, index: number) => (
                   <>
                     {book.image.startsWith("https://gateway.pinata.cloud") && (
-                      <Grid key={index}>
+                      <Grid key={index} className="">
                         <Link
                           href={{
                             pathname: `/admin/books/image/${book.title}?booksCategory=${booksCategory}`,
@@ -101,7 +107,8 @@ export default function Page() {
                               height={200}
                               src={book.image}
                               alt={book.title}
-                              className=" hover:scale-105 hover:shadow-lg hover:shadow-[var(--secondary)] rounded-3xl transition-all duration-300 ease-in-out"
+                              style={{ maxHeight: "200px", maxWidth: "150px" }}
+                              className="  hover:scale-105 hover:shadow-lg hover:shadow-[var(--secondary)] rounded-3xl transition-all duration-300 ease-in-out"
                             />
                           </>
                         </Link>
@@ -120,33 +127,37 @@ export default function Page() {
 
 function ButtonRow({ handleOpen, booksCategory }: { handleOpen: any; booksCategory: string }) {
   return (
-    <div className="mt-6 px-16 flex items-center justify-between">
-      <div className="space-x-8">
+    <div className="mt-6 lg:px-16 px-4 flex  lg:flex-nowrap flex-wrap items-center justify-between">
+      <div className=" space-x-2  flex    w-full   items-center">
         {["all", "primary", "secondary", "university"].map((category) => (
-          <Link key={category} href={{ query: { booksCategory: category } }}>
-            <button
-              className={`${
-                booksCategory === category
-                  ? "text-[var(--secondary)] border-[var(--secondary)]"
-                  : "text-[var(--gary)] border-[var(--gary)]"
-              } px-8 py-[0.3rem] rounded-lg font-semibold border-2 transition-all duration-300 ease-in-out`}
-            >
-              {category.charAt(0).toUpperCase() + category.slice(1)}
-            </button>
-          </Link>
+          <div className=" flex   items-start  ">
+            <Link key={category} href={{ query: { booksCategory: category } }}>
+              <button
+                className={`${
+                  booksCategory === category
+                    ? "text-[var(--secondary)] border-[var(--secondary)]"
+                    : "text-[var(--gary)] border-[var(--gary)]"
+                } px-4  text-sm py-[0.3rem] rounded-lg font-semibold border-2 transition-all duration-300 ease-in-out`}
+              >
+                {category.charAt(0).toUpperCase() + category.slice(1)}
+              </button>
+            </Link>
+          </div>
         ))}
       </div>
 
-      <button
-        onClick={handleOpen}
-        className="bg-[var(--secondary)]  group hover:bg-white border-2 border-transparent hover:text-[var(--secondary)] hover:border-[var(--secondary)] duration-300 ease-in-out transition-all text-white font-bold rounded-lg px-4 py-2 flex items-center"
-      >
-        <AddIcon
-          sx={{ color: "white", mr: "6px" }}
-          className="group-hover:text-[var(--secondary)]  duration-300 ease-in-out transition-all"
-        />
-        Add Book
-      </button>
+      <div className="w-full justify-end flex lg:mt-0 mt-4">
+        <button
+          onClick={handleOpen}
+          className="bg-[var(--secondary)]  text-sm group hover:bg-white border-2 border-transparent hover:text-[var(--secondary)] hover:border-[var(--secondary)] duration-300 ease-in-out transition-all text-white font-bold rounded-lg px-4 py-[0.4rem] flex items-center"
+        >
+          <AddIcon
+            sx={{ color: "white", mr: "6px" }}
+            className="   group-hover:text-[var(--secondary)]  duration-300 ease-in-out transition-all"
+          />
+          Add Book
+        </button>
+      </div>
     </div>
   )
 }

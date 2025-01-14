@@ -3,8 +3,14 @@ import { useState } from "react"
 import SearchBar from "@/app/components/SearchBar"
 import Link from "next/link"
 import { BookType } from "../lib/Books/fetcher"
+import MenuIcon from "@mui/icons-material/Menu"
+import { MenuPopover } from "./Popover"
 const Header = ({ page, searchBarToggle }: { page: string; searchBarToggle: boolean }) => {
   const [searchResults, setSearchResults] = useState([])
+  const [open, setOpen] = React.useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
+
   const handleSearch = async (query: string) => {
     if (!query.trim()) {
       setSearchResults([])
@@ -25,14 +31,21 @@ const Header = ({ page, searchBarToggle }: { page: string; searchBarToggle: bool
   }
 
   return (
-    <div className=" bg-[var(--secondary)] w-full flex relative px-16 py-6  rounded-tl-[2rem] ">
-      <h1 className="text-3xl font-bold text-white">{page}</h1>
+    <div className=" bg-[var(--secondary)] w-full flex lg:justify-between justify-between relative sm:px-16 px-2 py-6 h-[5rem]  lg:rounded-tl-[2rem] ">
+      <h1 className="text-3xl font-bold text-white sm:block hidden justify-start">{page}</h1>
+      <MenuPopover open={open} handleClose={handleClose} />
 
       {searchBarToggle && (
-        <div className="absolute top-5   xl:left-[25rem] lg:left-[20rem] lg:max-w-[20rem] left-[15rem] w-full xl:max-w-[30rem] max-w-[15rem]   ">
+        <div className=" flex  xl:left-[25rem] lg:left-[20rem] lg:max-w-[20rem] left-[15rem] w-full xl:max-w-[30rem] max-w-[15rem]   ">
           <SearchBar placeholder="Search..." onSearch={handleSearch} />
         </div>
       )}
+
+      <div className=" opacity-0 sm:block hidden">hello</div>
+
+      <div className="sm:hidden flex items-center text-white " onClick={handleOpen}>
+        <MenuIcon sx={{ fontSize: "40px" }} />
+      </div>
 
       {/* Render search results */}
       {searchBarToggle && searchResults.length > 0 && (

@@ -10,7 +10,7 @@ const layout = ({
     <div className="bg-[var(--background)]">
       <SideBar />
 
-      <div className="ml-[15rem] max-w-[85vw] ">{children}</div>
+      <div className="lg:ml-[15rem] ml-0 lg:max-w-[85vw] max-w-[100vw] overflow-hidden ">{children}</div>
     </div>
   )
 }
