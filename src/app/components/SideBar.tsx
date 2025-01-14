@@ -40,7 +40,7 @@ const SideBar = () => {
           </div>
         </Link>
 
-        <Link href={"/admin/request"} className="flex items-center space-x-2  ">
+        <Link href={"/admin/request?formStatus=Pending"} className="flex items-center space-x-2  ">
           <Image src={requestIcon} width={35} height={35} alt={`requestIcon `} className="-mt-1" />
           <div className="flex flex-col">
             <div className="text-xl flex -mb-1 hover:text-2xl transition-all duration-150 ease-in"> Request </div>

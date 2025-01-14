@@ -25,13 +25,13 @@ const formSchema = z.object({
       book_title: z.string(),
     })
   ),
-  // book_return_date: z.string().datetime(),
+
   book_return_date: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format, use YYYY-MM-DD")
     .nonempty(),
   borrowed_status: z.enum(["borrowed", "returned", "NotReturned", "rejected", "not_yet"]),
-  request_status: z.enum(["Pending", "Approved", "Denied"]),
+  request_status: z.enum(["Pending", "Approved", "Accepted", "Rejected"]),
 })
 
 export const dynamic = "force-dynamic"
