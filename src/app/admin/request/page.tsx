@@ -12,7 +12,7 @@ import "tippy.js/themes/translucent.css"
 import Grid from "@mui/material/Grid2"
 import Image from "next/image"
 import { Suspense } from "react"
-
+import { Fade } from "@mui/material"
 import { fetchBooks } from "@/app/lib/Books/fetcher"
 import { BookType } from "@/app/lib/Books/fetcher"
 import { useQuery } from "@tanstack/react-query"
@@ -92,10 +92,12 @@ export default function Page() {
       <div className="container mx-auto py-10">
         <div>
           {forms && (
-            <React.Fragment>
-              <h1 className="font-medium text-xl px-8 mx-4 mb-4">Requests Table</h1>
-              <DataTable columns={columns} data={forms} />
-            </React.Fragment>
+            <Fade in={true} timeout={300}>
+              <div>
+                <h1 className="font-medium text-xl px-8 mx-4 mb-4">Requests Table</h1>
+                <DataTable columns={columns} data={forms} />
+              </div>
+            </Fade>
           )}
         </div>
       </div>
