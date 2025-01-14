@@ -121,8 +121,8 @@ export default function Page() {
 
 function ButtonRow({ formStatus }: { formStatus: string }) {
   return (
-    <div className="mt-6 px-16 flex items-center justify-end">
-      <div className="space-x-2">
+    <div className="mt-6 lg:px-16 px-4 flex  items-center justify-end">
+      <div className="space-x-2 flex-wrap w-full justify-end flex">
         {["Pending", "Approved", "Accepted", "Rejected"].map((status) => (
           <Link key={status} href={{ query: { formStatus: status } }}>
             <button
@@ -130,7 +130,7 @@ function ButtonRow({ formStatus }: { formStatus: string }) {
                 formStatus === status
                   ? "text-[var(--secondary)] border-[var(--secondary)]"
                   : "text-[var(--gary)] border-[var(--gary)]"
-              } px-8 py-[0.3rem] rounded-lg font-semibold border-2 transition-all duration-300 ease-in-out text-sm`}
+              } px-4  text-sm py-[0.3rem] rounded-lg font-semibold border-2 transition-all duration-300 ease-in-out  `}
             >
               {status.charAt(0).toUpperCase() + status.slice(1)}
             </button>

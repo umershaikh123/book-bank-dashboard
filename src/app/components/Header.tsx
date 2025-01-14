@@ -41,9 +41,9 @@ const Header = ({ page, searchBarToggle }: { page: string; searchBarToggle: bool
         </div>
       )}
 
-      <div className=" opacity-0 sm:block hidden">hello</div>
+      <div className=" opacity-0 lg:block hidden">hello</div>
 
-      <div className="sm:hidden flex items-center text-white " onClick={handleOpen}>
+      <div className="lg:hidden flex items-center text-white " onClick={handleOpen}>
         <MenuIcon sx={{ fontSize: "40px" }} />
       </div>
 
