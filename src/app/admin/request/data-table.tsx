@@ -12,7 +12,7 @@ import {
 } from "@tanstack/react-table"
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-
+import RequestDrawer from "@/app/components/Drawer"
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
@@ -20,6 +20,8 @@ interface DataTableProps<TData, TValue> {
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
+  const [selectedRow, setSelectedRow] = React.useState<TData | null>(null)
+  const [drawerOpen, setDrawerOpen] = React.useState(false)
 
   const table = useReactTable({
     data,
@@ -32,6 +34,16 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
       sorting,
     },
   })
+
+  const handleRowClick = (row: TData) => {
+    setSelectedRow(row)
+    setDrawerOpen(true)
+  }
+
+  const closeDrawer = () => {
+    setDrawerOpen(false)
+    // setSelectedRow(null)
+  }
   const getRequestStatusStyles = (status: string) => {
     switch (status) {
       case "Pending":
@@ -61,7 +73,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id} className="  ">
+              <TableRow key={row.id} className="cursor-pointer" onClick={() => handleRowClick(row.original)}>
                 {row.getVisibleCells().map((cell) => (
                   <React.Fragment>
                     <TableCell
@@ -87,6 +99,8 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           )}
         </TableBody>
       </Table>
+
+      {selectedRow && <RequestDrawer open={drawerOpen} onClose={closeDrawer} data={selectedRow} />}
     </div>
   )
 }

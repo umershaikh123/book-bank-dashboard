@@ -30,7 +30,7 @@ interface BookRequired {
   book_title: string
 }
 
-interface FormData {
+export interface FormData {
   address: string
   book_return_date: string
   books_required: BookRequired[]
@@ -90,9 +90,14 @@ export default function Page() {
         <ButtonRow formStatus={formStatus || "Pending"} />
       </Suspense>
       <div className="container mx-auto py-10">
-        <h1 className="font-medium text-xl px-8 mx-4 mb-4">Requests Table</h1>
-
-        <div>{forms && <DataTable columns={columns} data={forms} />}</div>
+        <div>
+          {forms && (
+            <React.Fragment>
+              <h1 className="font-medium text-xl px-8 mx-4 mb-4">Requests Table</h1>
+              <DataTable columns={columns} data={forms} />
+            </React.Fragment>
+          )}
+        </div>
       </div>
       {isLoading && (
         <div className="justify-center items-center h-[60vh]  w-full flex">
