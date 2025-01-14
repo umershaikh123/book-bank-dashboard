@@ -15,7 +15,7 @@ export async function POST(req: Request) {
       FROM students 
       WHERE email = ${email}
     `
-    console.log("student data", student)
+    console.log("student data", student, "\n")
     if (!student || student.length === 0) {
       return NextResponse.json({ success: false, error: "Invalid email" }, { status: 401 })
     }
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
       .setExpirationTime("1d")
       .sign(SECRET_KEY)
 
-    return NextResponse.json({ success: true, jwt: token, data: student }, { status: 200 })
+    return NextResponse.json({ success: true, jwt: token, data: student[0] }, { status: 200 })
   } catch (err) {
     console.error(err)
     return NextResponse.json({ success: false, error: "Internal Server Error" }, { status: 500 })
