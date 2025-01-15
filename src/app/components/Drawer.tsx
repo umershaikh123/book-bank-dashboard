@@ -134,7 +134,13 @@ export default function RequestDrawer({
                     key={index}
                     className="flex items-center gap-4 p-4 border rounded-lg shadow-sm hover:shadow-md transition-all duration-300 ease-in-out"
                   >
-                    <img src={book.image} alt={book.title} className="w-16 h-16 rounded object-cover" />
+                    <img
+                      src={book.image}
+                      alt={book.title}
+                      width={70}
+                      height={70}
+                      className=" max-w-[85px] max-h-[85px]    rounded object-cover"
+                    />
                     <div className="flex-1">
                       <h4 className="font-bold text-gray-800">{book.title}</h4>
                       <p className="text-sm text-gray-600">Author: {book.author}</p>
@@ -275,7 +281,13 @@ export function RequestMonitorDrawer({
                     key={index}
                     className="flex items-center gap-4 p-4 border rounded-lg shadow-sm hover:shadow-md transition-all duration-300 ease-in-out"
                   >
-                    <img src={book.image} alt={book.title} className="w-16 h-16 rounded object-cover" />
+                    <img
+                      src={book.image}
+                      alt={book.title}
+                      width={70}
+                      height={70}
+                      className=" max-w-[85px] max-h-[85px]     rounded object-cover"
+                    />
                     <div className="flex-1">
                       <h4 className="font-bold text-gray-800">{book.title}</h4>
                       <p className="text-sm text-gray-600">Author: {book.author}</p>

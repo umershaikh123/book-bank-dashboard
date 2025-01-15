@@ -49,7 +49,7 @@ const Header = ({ page, searchBarToggle }: { page: string; searchBarToggle: bool
 
       {/* Render search results */}
       {searchBarToggle && searchResults.length > 0 && (
-        <div className="absolute shadow-xl border hover:bg-slate-200 duration-300 transition-all ease-in-out border-[#ABABAB] top-[4.1rem] xl:left-[25rem] lg:left-[20rem] lg:max-w-[20rem] left-[15rem] bg-white   rounded-md p-4 w-full xl:max-w-[30rem] max-w-[15rem]">
+        <div className="absolute shadow-xl border hover:bg-slate-200 duration-300 transition-all ease-in-out border-[#ABABAB] top-[4.1rem] xl:left-[25rem] lg:left-[20rem]   sm:left-[15rem] left-[0rem] bg-white   rounded-md p-4 w-full   max-w-[30rem]">
           <ul className="grid grid-cols-1 gap-2   mt-4">
             {searchResults.map((book: BookType, index) => (
               <Link

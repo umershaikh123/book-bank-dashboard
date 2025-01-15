@@ -50,7 +50,7 @@ const ImagePage = ({ params }: { params: { id: string } }) => {
           <div className="">
             <button
               onClick={() => router.push("/admin/books?booksCategory=all")}
-              className=" group mt-5 ml-16 bg-[#282828] px-8 py-2 rounded-3xl flex items-center border-2  hover:bg-yellow-50 hover:text-[#282828]  border-[#282828] text-white duration-300 ease-in-out transition-all"
+              className=" group mt-5 sm:ml-16 ml-2 bg-[#282828] px-8 py-2 rounded-3xl flex items-center border-2  hover:bg-yellow-50 hover:text-[#282828]  border-[#282828] text-white duration-300 ease-in-out transition-all"
             >
               <ArrowBackIcon
                 sx={{
@@ -64,7 +64,13 @@ const ImagePage = ({ params }: { params: { id: string } }) => {
             </button>
             <div className="flex items-center justify-center w-full h-[70vh]">
               <div className="flex justify-evenly  bg-white rounded-3xl shadow-md shadow-black w-fit h-[25rem] px-10 py-6">
-                <img src={bookDetails.image} alt={bookDetails.title as string} width={250} height={250} />
+                <img
+                  src={bookDetails.image}
+                  alt={bookDetails.title as string}
+                  width={250}
+                  height={250}
+                  className=" sm:flex hidden"
+                />
 
                 <div className="flex flex-col justify-evenly space-y-8 text-[var(--secondary)] ml-8 mt-4">
                   <div>

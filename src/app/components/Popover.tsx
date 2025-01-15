@@ -323,7 +323,7 @@ export const DeleteBookPopover = ({
             sx={{
               position: "absolute",
               top: "50%",
-              left: "60%",
+
               transform: "translate(-50%, -50%)",
               width: 500,
               height: "30vh",
@@ -333,6 +333,7 @@ export const DeleteBookPopover = ({
               px: 4,
               py: 2,
             }}
+            className=" lg:left-[60%] left-[50%]"
           >
             <CloseIcon
               sx={{ fontSize: "30px" }}
@@ -402,16 +403,17 @@ export const MenuPopover = ({ open, handleClose }: { open: boolean; handleClose:
               top: "25%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-              width: 500,
+
               height: "17rem",
               bgcolor: "background.paper",
               boxShadow: 24,
               borderRadius: "24px",
-              px: 4,
+              px: 8,
               py: 2,
             }}
+            className=" sm:w-[30rem] w-fit"
           >
-            <div className="flex flex-col space-y-6 items-start   ">
+            <div className="flex flex-col space-y-6 items-start  justify-normal  w-full   ">
               <Link href={"/admin/books?booksCategory=all"} className="flex items-center space-x-2 ">
                 <Image src={bookIcon} width={35} height={35} alt={`Books icon`} />
 
@@ -580,16 +582,17 @@ export const UpdateBookPopover = ({ open, handleClose, booksData }: { open: bool
             sx={{
               position: "absolute",
               top: "50%",
-              left: "60%",
+
               transform: "translate(-50%, -50%)",
               width: 400,
-              height: "30rem",
+              height: "95vh",
               bgcolor: "background.paper",
               boxShadow: 24,
               borderRadius: "24px",
               px: 4,
               py: 2,
             }}
+            className=" lg:left-[60%] left-[50%]"
           >
             <CloseIcon
               sx={{ fontSize: "30px" }}
