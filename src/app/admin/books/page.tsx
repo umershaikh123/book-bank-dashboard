@@ -37,6 +37,7 @@ export default function Page() {
     queryKey: ["books", booksCategory],
     queryFn: async () => await fetchBooks(booksCategory || "all"),
     refetchOnWindowFocus: false,
+    enabled: !!booksCategory,
   })
 
   if (isError) {

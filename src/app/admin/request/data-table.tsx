@@ -57,7 +57,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     }
   }
   return (
-    <div className=" shadow-xl py-4 px-8  border rounded-3xl  mx-8  ">
+    <div className=" shadow-xl      py-4 lg:px-8 px-2  border rounded-3xl  lg:mx-4 mx-2  ">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -100,7 +100,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         </TableBody>
       </Table>
 
-      {selectedRow && <RequestDrawer open={drawerOpen} onClose={closeDrawer} data={selectedRow} />}
+      {selectedRow && <RequestDrawer open={drawerOpen} onClose={closeDrawer} formData={selectedRow} />}
     </div>
   )
 }

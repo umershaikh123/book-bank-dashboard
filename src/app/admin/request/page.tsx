@@ -31,15 +31,15 @@ interface BookRequired {
 }
 
 export interface FormData {
-  address: string
   book_return_date: string
   books_required: BookRequired[]
-  borrowed_status: string
   created_at: string
   father_name: string
-  form_number: number
   mobile: string
   name: string
+  form_number: number
+  address: string
+  borrowed_status: string
   request_status: "Pending" | "Approved" | "Accepted" | "Rejected"
   student_cnic: string
   updated_at: string
@@ -49,6 +49,7 @@ export interface FormData {
 function useFetchForms(formStatus: string) {
   return useQuery({
     queryKey: ["forms", formStatus],
+
     queryFn: async () => {
       const token = localStorage.getItem("auth_token")
 
@@ -75,6 +76,7 @@ function useFetchForms(formStatus: string) {
       }))
       return formattedData.filter((form: Form) => form.request_status === formStatus) as FormData[]
     },
+    enabled: !!formStatus,
   })
 }
 
@@ -89,7 +91,7 @@ export default function Page() {
       <Suspense>
         <ButtonRow formStatus={formStatus || "Pending"} />
       </Suspense>
-      <div className="container mx-auto py-10">
+      <div className=" lg:container contain-none   w-full mx-auto py-10">
         <div>
           {forms && (
             <Fade in={true} timeout={300}>
