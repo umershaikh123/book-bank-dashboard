@@ -89,10 +89,7 @@ export default function RequestDrawer({
                 <span className="font-semibold text-gray-600">Address:</span>
                 <span>{formData.address}</span>
               </div>
-              <div className="flex justify-between mb-2">
-                <span className="font-semibold text-gray-600">Borrowed Status:</span>
-                <span>{formData.borrowed_status}</span>
-              </div>
+
               <div className="flex justify-between">
                 <span className="font-semibold text-gray-600">Request Status:</span>
                 <span
