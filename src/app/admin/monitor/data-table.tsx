@@ -12,7 +12,7 @@ import {
 } from "@tanstack/react-table"
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import RequestDrawer from "@/app/components/Drawer"
+import { RequestMonitorDrawer } from "@/app/components/Drawer"
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
@@ -47,15 +47,15 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     setDrawerOpen(false)
     // setSelectedRow(null)
   }
-  const getRequestStatusStyles = (status: string) => {
+
+  const getRequestStatusStyles = (status: "borrowed" | "returned" | "NotReturned") => {
     switch (status) {
-      case "Pending":
+      case "borrowed":
         return "text-yellow-600"
-      case "Approved":
-        return "text-blue-600"
-      case "Accepted":
+
+      case "returned":
         return "text-green-600"
-      case "Rejected":
+      case "NotReturned":
         return "text-red-600"
     }
   }
@@ -86,8 +86,8 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                     <TableCell
                       key={cell.id}
                       className={
-                        cell.column.id === "request_status"
-                          ? `  font-medium  ${getRequestStatusStyles(cell.getValue() as string)}`
+                        cell.column.id === "borrowed_status"
+                          ? `  font-medium  ${getRequestStatusStyles(cell.getValue() as "borrowed" | "returned" | "NotReturned")}`
                           : ""
                       }
                     >
@@ -107,7 +107,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         </TableBody>
       </Table>
 
-      {selectedRow && <RequestDrawer open={drawerOpen} onClose={closeDrawer} formData={selectedRow} />}
+      {selectedRow && <RequestMonitorDrawer open={drawerOpen} onClose={closeDrawer} formData={selectedRow} />}
     </div>
   )
 }

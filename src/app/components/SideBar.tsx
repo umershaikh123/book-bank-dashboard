@@ -4,6 +4,7 @@ import React from "react"
 import bookIcon from "/public/Images/sidebar/books.svg"
 import requestIcon from "/public/Images/sidebar/request.svg"
 import monitoringIcon from "/public/Images/sidebar/monitoring.svg"
+import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import Link from "next/link"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -64,13 +65,13 @@ const SideBar = () => {
           </div>
         </Link>
 
-        <Link href={"/admin/monitor"} className="flex items-center space-x-2  ">
-          <Image src={monitoringIcon} width={35} height={35} alt={`monitoringIcon`} className="-mt-3" />
+        <Link href={"/admin/newBooks?borrowed_status=borrowed"} className="flex items-center space-x-2  ">
+          <AccountCircleIcon sx={{ fontSize: "35px" }} className=" -mt-1" />
           <div className="flex flex-col">
             <div className="text-xl flex -mb-2 hover:text-2xl transition-all duration-150 ease-in"> New Books </div>
             <div
               className={`${
-                path === "/admin/monitor" ? "opacity-100" : "opacity-0"
+                path === "/admin/newBooks" ? "opacity-100" : "opacity-0"
               }  bg-[var(--secondary)] transition-all duration-150 h-1 mt-2`}
             ></div>
           </div>

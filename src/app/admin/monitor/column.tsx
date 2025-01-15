@@ -8,7 +8,7 @@ export type Form = {
   father_name: string
   student_cnic: string
   mobile: string
-  request_status: "Pending" | "Approved" | "Accepted" | "Rejected"
+  borrowed_status: "borrowed" | "returned" | "NotReturned"
   book_return_date: string
   timestamp: string
   form_number: number
@@ -47,7 +47,7 @@ export const columns: ColumnDef<Form>[] = [
     header: "Timestamp",
   },
   {
-    accessorKey: "request_status",
-    header: "Status",
+    accessorKey: "borrowed_status",
+    header: "borrowed Status",
   },
 ]

@@ -1,23 +1,16 @@
 "use client"
 
 import React, { useState } from "react"
-import AddIcon from "@mui/icons-material/Add"
+
 import Header from "@/app/components/Header"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import Tippy from "@tippyjs/react"
-import "tippy.js/dist/tippy.css"
-import "tippy.js/animations/scale.css"
-import "tippy.js/themes/translucent.css"
-import Grid from "@mui/material/Grid2"
-import Image from "next/image"
+
 import { Suspense } from "react"
 import { Fade } from "@mui/material"
-import { fetchBooks } from "@/app/lib/Books/fetcher"
-import { BookType } from "@/app/lib/Books/fetcher"
+
 import { useQuery } from "@tanstack/react-query"
-import { queryClient } from "@/utils/Provider"
-import { toast } from "react-toastify"
+
 import Lottie from "lottie-react"
 // import { Fade } from "@mui/material"
 import { DataTable } from "./data-table"
@@ -39,7 +32,7 @@ export interface FormData {
   name: string
   form_number: number
   address: string
-  borrowed_status: string
+  borrowed_status: "borrowed" | "returned" | "NotReturned"
   request_status: "Pending" | "Approved" | "Accepted" | "Rejected"
   student_cnic: string
   updated_at: string
