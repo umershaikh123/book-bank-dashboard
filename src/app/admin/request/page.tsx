@@ -84,7 +84,7 @@ export default function Page() {
       <Suspense>
         <ButtonRow formStatus={formStatus || "Pending"} />
       </Suspense>
-      <div className=" lg:container contain-none   w-full mx-auto py-10">
+      <div className=" lg:container contain-none   w-full mx-auto pb-10">
         <div>
           {forms && (
             <Fade in={true} timeout={300}>
