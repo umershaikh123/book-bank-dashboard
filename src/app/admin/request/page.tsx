@@ -11,13 +11,12 @@ import { Fade } from "@mui/material"
 
 import { useQuery } from "@tanstack/react-query"
 
-import Lottie from "lottie-react"
-// import { Fade } from "@mui/material"
 import { DataTable } from "./data-table"
 import { Form, columns } from "./column"
 
 // @ts-ignore
 import notFoundAnimation from "/public/animations/notFound.json"
+import Lottie from "lottie-react"
 import { formatDate, calculateTimeDifference } from "@/lib/utils"
 interface BookRequired {
   book_title: string
@@ -101,15 +100,6 @@ export default function Page() {
           <div className="loader"></div>
         </div>
       )}
-
-      {isError ||
-        (!isLoading && forms?.length === 0 && (
-          <div className="justify-center items-center h-fit w-full flex flex-col">
-            <Lottie style={{ height: 200, width: 200 }} animationData={notFoundAnimation} loop={true} />
-
-            <h1 className="text-xl font-bold text-gray-300">Data not Found</h1>
-          </div>
-        ))}
     </div>
   )
 }

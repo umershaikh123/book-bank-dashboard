@@ -17,6 +17,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import RequestDrawer from "@/app/components/Drawer"
 import { Input } from "@/components/ui/input"
 import { DataTablePagination } from "@/app/components/pagination"
+
+// @ts-ignore
+import notFoundAnimation from "/public/animations/notFound.json"
+import Lottie from "lottie-react"
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
@@ -112,7 +116,11 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="text-center">
-                No results found.
+                <div className="justify-center items-center h-fit w-full flex flex-col">
+                  <Lottie style={{ height: 200, width: 200 }} animationData={notFoundAnimation} loop={true} />
+
+                  <h1 className="text-xl font-bold text-gray-300">Data not Found</h1>
+                </div>
               </TableCell>
             </TableRow>
           )}

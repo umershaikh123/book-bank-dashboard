@@ -104,15 +104,6 @@ export default function Page() {
           <div className="loader"></div>
         </div>
       )}
-
-      {isError ||
-        (!isLoading && forms?.length === 0 && (
-          <div className="justify-center items-center h-fit w-full flex flex-col">
-            <Lottie style={{ height: 200, width: 200 }} animationData={notFoundAnimation} loop={true} />
-
-            <h1 className="text-xl font-bold text-gray-300">Data not Found</h1>
-          </div>
-        ))}
     </div>
   )
 }
