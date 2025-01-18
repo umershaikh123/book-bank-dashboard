@@ -17,9 +17,10 @@ import {
 import notFoundAnimation from "/public/animations/notFound.json"
 import Lottie from "lottie-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import RequestDrawer from "@/app/components/Drawers/RequestDrawer"
+
 import { Input } from "@/components/ui/input"
 import { DataTablePagination } from "@/app/components/pagination"
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
@@ -28,7 +29,7 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [selectedRow, setSelectedRow] = React.useState<TData | null>(null)
-  const [drawerOpen, setDrawerOpen] = React.useState(false)
+
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const table = useReactTable({
     data,
@@ -45,37 +46,18 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     },
   })
 
-  const handleRowClick = (row: TData) => {
-    setSelectedRow(row)
-    setDrawerOpen(true)
-  }
-
-  const closeDrawer = () => {
-    setDrawerOpen(false)
-  }
-  const getRequestStatusStyles = (status: "borrowed" | "returned" | "NotReturned") => {
-    switch (status) {
-      case "borrowed":
-        return "text-yellow-600"
-
-      case "returned":
-        return "text-green-600"
-      case "NotReturned":
-        return "text-red-600"
-    }
-  }
   return (
     <div className=" shadow-xl py-4 lg:px-8 px-2  border rounded-3xl  lg:mx-4 mx-2  ">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter cnic..."
-          value={(table.getColumn("student_cnic")?.getFilterValue() as string) ?? ""}
-          onChange={(event) => table.getColumn("student_cnic")?.setFilterValue(event.target.value)}
+          placeholder="Filter book_title..."
+          value={(table.getColumn("book_title")?.getFilterValue() as string) ?? ""}
+          onChange={(event) => table.getColumn("book_title")?.setFilterValue(event.target.value)}
           className="max-w-sm"
         />
       </div>
 
-      <Table>
+      <Table className="">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -93,19 +75,10 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id} className="cursor-pointer" onClick={() => handleRowClick(row.original)}>
+              <TableRow key={row.id} className="cursor-pointer">
                 {row.getVisibleCells().map((cell) => (
                   <React.Fragment>
-                    <TableCell
-                      key={cell.id}
-                      className={
-                        cell.column.id === "borrowed_status"
-                          ? `  font-medium  ${getRequestStatusStyles(cell.getValue() as "borrowed" | "returned" | "NotReturned")}`
-                          : ""
-                      }
-                    >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
+                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   </React.Fragment>
                 ))}
               </TableRow>
@@ -125,8 +98,6 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
       </Table>
 
       <DataTablePagination table={table} />
-
-      {selectedRow && <RequestDrawer open={drawerOpen} onClose={closeDrawer} formData={selectedRow} />}
     </div>
   )
 }

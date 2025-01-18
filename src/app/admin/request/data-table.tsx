@@ -14,7 +14,7 @@ import {
 } from "@tanstack/react-table"
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import RequestDrawer from "@/app/components/Drawer"
+import RequestDrawer from "@/app/components/Drawers/RequestDrawer"
 import { Input } from "@/components/ui/input"
 import { DataTablePagination } from "@/app/components/pagination"
 

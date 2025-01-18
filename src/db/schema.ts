@@ -42,3 +42,9 @@ export const studentsTable = pgTable("students", {
   created_at: timestamp("created_at").defaultNow(),
   updated_at: timestamp("updated_at").defaultNow(),
 })
+
+export const bookRequestsTable = pgTable("book_requests", {
+  book_title: text("book_title").primaryKey(),
+  serial_no: serial("serial_no").notNull(),
+  timestamp: timestamp("timestamp").defaultNow(),
+})

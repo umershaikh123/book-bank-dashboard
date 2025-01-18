@@ -65,7 +65,7 @@ export function StudentDrawer({
               </div>
               <div className="flex justify-between file:">
                 <span className="font-semibold text-gray-600">Address:</span>
-                <span>{studentData.address}</span>
+                <span className="max-w-[16rem] text-right">{studentData.address}</span>
               </div>
 
               {studentData.totalBooksNotReturned > 0 && (

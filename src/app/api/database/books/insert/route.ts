@@ -3,14 +3,10 @@ import { neon } from "@neondatabase/serverless"
 import { verifyToken } from "@/utils/verifyToken"
 import { z } from "zod"
 
-// Define Zod validation schema
 const bookSchema = z.object({
   title: z.string().min(1, "Title is required"),
   author: z.string().min(1, "Author is required"),
   category: z.string().min(1, "Category is required"),
-  // totalCopies: z.string().min(1, "Total copies must be at least 1"),
-  // availableCopies: z.string().min(1, "Available copies cannot be negative"),
-  // price: z.string().min(1, "Price cannot be negative"),
   totalCopies: z.number().min(1, "Total copies must be at least 1"),
   availableCopies: z.number().min(0, "Available copies cannot be negative"),
   price: z.number().min(0, "Price cannot be negative"),
