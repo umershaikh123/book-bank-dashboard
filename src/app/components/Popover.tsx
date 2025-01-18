@@ -19,7 +19,8 @@ import requestIcon from "/public/Images/sidebar/request.svg"
 import monitoringIcon from "/public/Images/sidebar/monitoring.svg"
 import Link from "next/link"
 import Image from "next/image"
-
+import PriorityHighIcon from "@mui/icons-material/PriorityHigh"
+import PersonIcon from "@mui/icons-material/Person"
 const style = {
   position: "absolute",
   top: "50%",
@@ -404,7 +405,7 @@ export const MenuPopover = ({ open, handleClose }: { open: boolean; handleClose:
               left: "50%",
               transform: "translate(-50%, -50%)",
 
-              height: "17rem",
+              height: "20rem",
               bgcolor: "background.paper",
               boxShadow: 24,
               borderRadius: "24px",
@@ -436,10 +437,18 @@ export const MenuPopover = ({ open, handleClose }: { open: boolean; handleClose:
                 </div>
               </Link>
 
-              <Link href={"/admin/monitor"} className="flex items-center space-x-2  ">
-                <Image src={monitoringIcon} width={35} height={35} alt={`monitoringIcon`} className=" " />
+              <Link href={"/admin/newBooks?borrowed_status=borrowed"} className="flex items-center space-x-2  ">
+                <PriorityHighIcon sx={{ fontSize: "35px" }} className=" -mt-1" />
+
                 <div className="flex flex-col">
                   <div className="text-xl flex -mb-2 hover:text-2xl transition-all duration-150 ease-in"> New Books </div>
+                </div>
+              </Link>
+
+              <Link href={"/admin/students?studentStatus=whiteListed"} className="flex items-center space-x-2  ">
+                <PersonIcon sx={{ fontSize: "35px" }} className=" -mt-1" />
+                <div className="flex flex-col">
+                  <div className="text-xl flex -mb-2 hover:text-2xl transition-all duration-150 ease-in"> Students </div>
                 </div>
               </Link>
 

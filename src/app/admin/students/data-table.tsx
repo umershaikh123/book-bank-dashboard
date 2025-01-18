@@ -17,9 +17,10 @@ import {
 import notFoundAnimation from "/public/animations/notFound.json"
 import Lottie from "lottie-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import RequestDrawer from "@/app/components/Drawer"
+
 import { Input } from "@/components/ui/input"
 import { DataTablePagination } from "@/app/components/pagination"
+import { StudentDrawer } from "@/app/components/Drawers/StudentDrawer"
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
@@ -52,19 +53,8 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 
   const closeDrawer = () => {
     setDrawerOpen(false)
-    
   }
-  const getRequestStatusStyles = (status: "borrowed" | "returned" | "NotReturned") => {
-    switch (status) {
-      case "borrowed":
-        return "text-yellow-600"
 
-      case "returned":
-        return "text-green-600"
-      case "NotReturned":
-        return "text-red-600"
-    }
-  }
   return (
     <div className=" shadow-xl py-4 lg:px-8 px-2  border rounded-3xl  lg:mx-4 mx-2  ">
       <div className="flex items-center py-4">
@@ -97,16 +87,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
               <TableRow key={row.id} className="cursor-pointer" onClick={() => handleRowClick(row.original)}>
                 {row.getVisibleCells().map((cell) => (
                   <React.Fragment>
-                    <TableCell
-                      key={cell.id}
-                      className={
-                        cell.column.id === "borrowed_status"
-                          ? `  font-medium  ${getRequestStatusStyles(cell.getValue() as "borrowed" | "returned" | "NotReturned")}`
-                          : ""
-                      }
-                    >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
+                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   </React.Fragment>
                 ))}
               </TableRow>
@@ -127,7 +108,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 
       <DataTablePagination table={table} />
 
-      {selectedRow && <RequestDrawer open={drawerOpen} onClose={closeDrawer} formData={selectedRow} />}
+      {selectedRow && <StudentDrawer open={drawerOpen} onClose={closeDrawer} studentData={selectedRow} />}
     </div>
   )
 }

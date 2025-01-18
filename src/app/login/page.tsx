@@ -67,7 +67,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex items-center justify-betweenh-screen bg-[var(--primary)] w-full overflow-y-clip">
+    <div className="flex items-center justify-between h-screen bg-[var(--primary)] w-full overflow-y-clip max-h-screen">
       <div className=" w-1/2 sm:flex  hidden  items-center justify-between    h-screen flex-col border-r-2 border-[var(--secondary)]">
         <div className="flex w-full justify-center text-center flex-col items-center space-y-3 mt-10">
           <h1 className="text-6xl text-[var(--secondary)] font-semibold">Book Bank</h1>

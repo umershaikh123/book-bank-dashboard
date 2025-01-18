@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${IBM_Plex_MonoFont.className} antialiased`}>
+      <body className={`${IBM_Plex_MonoFont.className} antialiased max-h-screen max-w-[100vw]`}>
         <QueryProvider>{children}</QueryProvider>
       </body>
     </html>

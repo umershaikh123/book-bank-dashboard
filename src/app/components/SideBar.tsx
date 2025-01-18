@@ -4,11 +4,12 @@ import React from "react"
 import bookIcon from "/public/Images/sidebar/books.svg"
 import requestIcon from "/public/Images/sidebar/request.svg"
 import monitoringIcon from "/public/Images/sidebar/monitoring.svg"
-import AccountCircleIcon from "@mui/icons-material/AccountCircle"
+
 import Link from "next/link"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { BookType } from "../lib/Books/fetcher"
+import PriorityHighIcon from "@mui/icons-material/PriorityHigh"
+import PersonIcon from "@mui/icons-material/Person"
 import { usePathname } from "next/navigation"
 import { toast } from "react-toastify"
 const SideBar = () => {
@@ -23,11 +24,11 @@ const SideBar = () => {
     router.push("/login")
   }
   return (
-    <div className=" lg:flex hidden  h-screen w-[15rem]   flex-col items-start pl-8 justify-between py-8  fixed text-[var(--secondary)] font-semibold  bg-[var(--background)]">
+    <div className=" lg:flex hidden  h-screen w-[15rem]   flex-col items-start pl-8 justify-between py-4  fixed text-[var(--secondary)] font-semibold  bg-[var(--background)]">
       <div className="">
         <h1 className="text-4xl  font-bold">Book Bank</h1>
       </div>
-      <div className="flex flex-col space-y-10 pb-32 ">
+      <div className="flex flex-col space-y-8 pb-16 ">
         <Link href={"/admin/books?booksCategory=all"} className="flex items-center space-x-2 ">
           <Image src={bookIcon} width={35} height={35} alt={`Books icon`} />
 
@@ -66,12 +67,24 @@ const SideBar = () => {
         </Link>
 
         <Link href={"/admin/newBooks?borrowed_status=borrowed"} className="flex items-center space-x-2  ">
-          <AccountCircleIcon sx={{ fontSize: "35px" }} className=" -mt-1" />
+          <PriorityHighIcon sx={{ fontSize: "35px" }} className=" -mt-1" />
           <div className="flex flex-col">
             <div className="text-xl flex -mb-2 hover:text-2xl transition-all duration-150 ease-in"> New Books </div>
             <div
               className={`${
                 path === "/admin/newBooks" ? "opacity-100" : "opacity-0"
+              }  bg-[var(--secondary)] transition-all duration-150 h-1 mt-2`}
+            ></div>
+          </div>
+        </Link>
+
+        <Link href={"/admin/students?studentStatus=whiteListed"} className="flex items-center space-x-2  ">
+          <PersonIcon sx={{ fontSize: "35px" }} className=" -mt-1" />
+          <div className="flex flex-col">
+            <div className="text-xl flex -mb-2 hover:text-2xl transition-all duration-150 ease-in"> Students </div>
+            <div
+              className={`${
+                path === "/admin/students" ? "opacity-100" : "opacity-0"
               }  bg-[var(--secondary)] transition-all duration-150 h-1 mt-2`}
             ></div>
           </div>
