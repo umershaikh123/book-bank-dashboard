@@ -70,7 +70,7 @@ export function StudentDrawer({
 
               {studentData.totalBooksNotReturned > 0 && (
                 <div className="flex justify-between mt-2">
-                  <span className="font-semibold text-gray-600">Not Returned Books:</span>
+                  <span className="font-semibold text-gray-600">Not Returned Book Sets:</span>
                   <span className="font-semibold bg-red-100 text-red-800 px-4 rounded-lg">
                     {studentData.totalBooksNotReturned}
                   </span>
@@ -78,14 +78,14 @@ export function StudentDrawer({
               )}
 
               <div className="flex justify-between mt-2">
-                <span className="font-semibold text-gray-600">Returned Books:</span>
+                <span className="font-semibold text-gray-600">Returned Books Sets:</span>
                 <span className="font-semibold bg-green-100 text-green-800 px-4 rounded-lg">
                   {studentData.totalBooksReturned}
                 </span>
               </div>
 
               <div className="flex justify-between mt-2">
-                <span className="font-semibold text-gray-600">Borrowed Books:</span>
+                <span className="font-semibold text-gray-600">Borrowed Books Sets:</span>
                 <span className="font-semibold bg-yellow-100 text-yellow-800 px-4 rounded-lg">
                   {studentData.totalBooksBorrowed}
                 </span>
@@ -93,7 +93,7 @@ export function StudentDrawer({
             </div>
 
             {/* Current Borrowed Books */}
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">Currently Borrowed Books:</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">Currently Borrowed Book Set:</h3>
             {studentData.current_borrowed.length > 0 ? (
               <div className="space-y-4">
                 {studentData.current_borrowed.map((book, index) => (

@@ -33,7 +33,7 @@ export const columns: ColumnDef<StudentType>[] = [
 
   {
     accessorKey: "totalBooksBorrowed",
-    header: "Books Borrowed",
+    header: "Book Set Borrowed",
 
     cell: ({ row }) => <div className=" text-yellow-600 text-center">{row.getValue("totalBooksBorrowed")}</div>,
   },

@@ -79,7 +79,7 @@ export default function Page() {
 
   return (
     <div className="flex flex-col   min-h-screen bg-white rounded-[2rem]   ">
-      <Header page={"Request"} searchBarToggle={false} />
+      <Header page={"Form Request"} searchBarToggle={false} />
       <Suspense>
         <ButtonRow formStatus={formStatus || "Pending"} />
       </Suspense>
@@ -88,7 +88,7 @@ export default function Page() {
           {forms && (
             <Fade in={true} timeout={300}>
               <div>
-                <h1 className="font-medium text-xl px-8 mx-4 mb-4">Requests Table</h1>
+                <h1 className="font-medium text-xl px-8 mx-4 mb-4">Form Requests Table</h1>
                 <DataTable columns={columns} data={forms} />
               </div>
             </Fade>
