@@ -14,7 +14,6 @@ export const dynamic = "force-dynamic"
 const updateStudentSchema = z.object({
   name: z.string().min(1, "Name is required").optional(),
   father_name: z.string().min(1, "Father's name is required").optional(),
-
   email: z.string().email("Invalid email format").optional(),
   address: z.string().min(1, "Address is required").optional(),
 })
