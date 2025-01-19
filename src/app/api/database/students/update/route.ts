@@ -53,7 +53,15 @@ export async function PUT(req: Request) {
       .where(eq(studentsTable.email, userEmail as any))
       .execute()
 
-    return NextResponse.json({ success: true, message: "Student updated successfully" }, { status: 200 })
+    const updatedStudentData = db
+      .select()
+      .from(studentsTable)
+      .where(eq(studentsTable.email, userEmail as any))
+
+    return NextResponse.json(
+      { success: true, message: "Student updated successfully", updatedData: updatedStudentData },
+      { status: 200 }
+    )
   } catch (err) {
     console.error("Error updating student:", err)
     return NextResponse.json({ success: false, error: "Internal Server Error" }, { status: 500 })
