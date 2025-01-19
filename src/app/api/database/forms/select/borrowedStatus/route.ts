@@ -17,8 +17,6 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url)
     const borrowed_status = searchParams.get("borrowed_status")
 
-    // Select books by borrowed_status
-    console.log("borrowed_status", borrowed_status)
     const forms = await db
       .select()
       .from(formsTable)

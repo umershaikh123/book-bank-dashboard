@@ -15,7 +15,7 @@ export async function POST(req: Request) {
       FROM students 
       WHERE email = ${email}
     `
-    console.log("student data", student, "\n")
+
     if (!student || student.length === 0) {
       return NextResponse.json({ success: false, error: "Invalid email" }, { status: 401 })
     }
@@ -27,11 +27,7 @@ export async function POST(req: Request) {
     }
 
     // Create a JWT token
-    const token = await new SignJWT({ email })
-      .setProtectedHeader({ alg: "HS256" })
-      .setIssuedAt()
-      .setExpirationTime("1d")
-      .sign(SECRET_KEY)
+    const token = await new SignJWT({ email }).setProtectedHeader({ alg: "HS256" }).setIssuedAt().sign(SECRET_KEY)
 
     return NextResponse.json({ success: true, jwt: token, data: student[0] }, { status: 200 })
   } catch (err) {

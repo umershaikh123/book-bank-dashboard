@@ -28,9 +28,9 @@ export async function POST(req: Request) {
 
     // Parse the incoming request body
     const body = await req.json()
-    console.log("body", body)
+
     const parsedData = updateBookSchema.safeParse(body)
-    console.log("parsedData", parsedData)
+
     if (!parsedData.success) {
       // If validation fails, return an error response
       return NextResponse.json({ success: false, error: parsedData.error.errors }, { status: 400 })
@@ -38,9 +38,7 @@ export async function POST(req: Request) {
 
     const { title, ...updateFields } = parsedData.data
 
-    // Perform update using Drizzle ORM
     const result = await db.update(booksTable).set(updateFields).where(eq(booksTable.title, title)).execute()
-    console.log("result", result)
 
     return NextResponse.json({ success: true, message: "Book updated successfully" }, { status: 200 })
   } catch (err) {

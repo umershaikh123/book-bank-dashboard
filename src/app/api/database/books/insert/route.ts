@@ -25,8 +25,6 @@ export async function POST(req: Request) {
     // Parse request body
     const body = await req.json()
 
-    console.log("body", body)
-
     // Validate incoming data using Zod
     const parsedData = bookSchema.safeParse(body)
 

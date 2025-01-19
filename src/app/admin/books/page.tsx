@@ -130,7 +130,7 @@ function ButtonRow({ handleOpen, booksCategory }: { handleOpen: any; booksCatego
   return (
     <div className="mt-6 lg:px-16 px-4 flex  lg:flex-nowrap flex-wrap items-center justify-between">
       <div className=" space-x-2  flex    w-full   items-center">
-        {["all", "primary", "secondary", "university"].map((category) => (
+        {["all", "school", "intermediate", "business"].map((category) => (
           <div className=" flex   items-start  ">
             <Link key={category} href={{ query: { booksCategory: category } }}>
               <button

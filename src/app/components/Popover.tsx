@@ -65,7 +65,6 @@ export const AddBookPopover = ({ open, handleClose }: { open: boolean; handleClo
     if (image) {
       // Upload image to Pinata
       imageUrl = await uploadImageToIPFS(image)
-      console.log("imageUrl", imageUrl)
     }
 
     const response = await fetch(API_URL, {
@@ -484,15 +483,14 @@ export const UpdateBookPopover = ({ open, handleClose, booksData }: { open: bool
     price: string
   }) => {
     const { image, author, category, totalCopies, availableCopies, price } = formData
-    console.log("image", image)
+
     const token = localStorage.getItem("auth_token")
     let imageUrl = ""
 
     if (image && image.size > 0) {
       imageUrl = await uploadImageToIPFS(image)
-      console.log("imageUrl", imageUrl)
     }
-    console.log("imageUrl", imageUrl)
+
     const response = await fetch("/api/database/books/update", {
       method: "POST",
       headers: {

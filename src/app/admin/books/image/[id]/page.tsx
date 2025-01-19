@@ -24,7 +24,7 @@ const ImagePage = ({ params }: { params: { id: string } }) => {
     image: searchParams.get("image") || "/Images/booksData/image1.svg",
   }
 
-  console.log("bookDetails", bookDetails)
+ 
   const [openDelete, setOpenDelete] = useState(false)
   const handleOpenDelete = () => setOpenDelete(true)
   const handleCloseDelete = () => setOpenDelete(false)

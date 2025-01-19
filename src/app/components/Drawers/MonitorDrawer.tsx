@@ -24,7 +24,7 @@ const fetchBooks = async (booksRequired: { book_title: string }[] | undefined) =
   }
 
   const data = await response.json()
-  console.log("books data", data)
+
   return data.data
 }
 

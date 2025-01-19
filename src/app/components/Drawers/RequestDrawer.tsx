@@ -6,9 +6,16 @@ import { FormData } from "../../admin/request/page"
 import { useQuery } from "@tanstack/react-query"
 import { BookType } from "../../lib/Books/fetcher"
 import Lottie from "lottie-react"
-import { Fade } from "@mui/material"
+import { Button } from "@/components/ui/button"
 // @ts-ignore
 import notFoundAnimation from "/public/animations/notFound.json"
+import { useToast } from "@/hooks/use-toast"
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { useState } from "react"
+import { useUpdateFormStatus } from "@/hooks/useFormMutation"
+import { queryClient } from "@/utils/Provider"
+import { useHandleFormStatus } from "../handleFormStatus"
+
 const fetchBooks = async (booksRequired: { book_title: string }[] | undefined) => {
   if (!booksRequired || booksRequired.length === 0) return []
   const token = localStorage.getItem("auth_token")
@@ -24,7 +31,7 @@ const fetchBooks = async (booksRequired: { book_title: string }[] | undefined) =
   }
 
   const data = await response.json()
-  console.log("books data", data)
+
   return data.data
 }
 
@@ -40,6 +47,11 @@ export default function RequestDrawer({
   const isValidFormData = (data: FormData | {}): data is FormData => {
     return "books_required" in data && Array.isArray((data as FormData).books_required) && "name" in data && "mobile" in data
   }
+  const [openRejectDialog, setOpenRejectDialog] = useState(false)
+  const [openApproveDialog, setOpenApproveDialog] = useState(false)
+  const [openAcceptDialog, setOpenAcceptDialog] = useState(false)
+  const { handleReject, handleApprove, handleAccept } = useHandleFormStatus()
+
   const {
     data: books,
     isLoading,
@@ -56,8 +68,6 @@ export default function RequestDrawer({
     refetchOnWindowFocus: false,
     enabled: isValidFormData(formData),
   })
-
-  console.log("data", formData)
 
   return (
     <Drawer open={open} anchor="right" onClose={onClose}>
@@ -154,6 +164,111 @@ export default function RequestDrawer({
                     </div>
                   </div>
                 ))}
+
+                {formData.request_status === "Pending" && (
+                  <div className=" pt-8 w-full  flex  items-center justify-evenly pb-8">
+                    <Button variant="destructive" size={"lg"} onClick={() => setOpenRejectDialog(true)}>
+                      Reject
+                    </Button>
+                    <Button
+                      className="bg-blue-100 text-blue-800 hover:border-blue-800 border "
+                      size={"lg"}
+                      onClick={() => setOpenApproveDialog(true)}
+                    >
+                      Approve
+                    </Button>
+                  </div>
+                )}
+
+                {formData.request_status === "Approved" && (
+                  <div className=" pt-8 w-full  flex  items-center justify-evenly pb-8">
+                    <Button variant="destructive" size={"lg"} onClick={() => setOpenRejectDialog(true)}>
+                      Reject
+                    </Button>
+                    <Button
+                      className="bg-blue-100 text-blue-800 hover:border-blue-800 border "
+                      size={"lg"}
+                      onClick={() => setOpenApproveDialog(true)}
+                    >
+                      Approve
+                    </Button>
+                  </div>
+                )}
+
+                {formData.request_status === "Accepted" && (
+                  <div className=" pt-8 w-full  flex  items-center justify-evenly pb-8">
+                    <Button variant="destructive" size={"lg"} onClick={() => setOpenRejectDialog(true)}>
+                      Reject
+                    </Button>
+                    <Button
+                      className="bg-green-100 text-green-800 hover:border-green-800 border "
+                      size={"lg"}
+                      onClick={() => setOpenAcceptDialog(true)}
+                    >
+                      Accept
+                    </Button>
+                  </div>
+                )}
+
+                <Dialog open={openAcceptDialog} onOpenChange={setOpenAcceptDialog}>
+                  <DialogContent className="bg-white z-[1500]">
+                    <DialogHeader>
+                      <DialogTitle>Confirm Acceptance</DialogTitle>
+                    </DialogHeader>
+                    <DialogDescription>Are you sure you want to Accept this student request ?</DialogDescription>
+                    <DialogFooter>
+                      <Button variant="secondary" onClick={() => setOpenAcceptDialog(false)} className="border-2">
+                        Cancel
+                      </Button>
+                      <Button
+                        className="bg-green-100 text-green-800 hover:border-green-800 border "
+                        onClick={() => handleAccept(formData.form_number, setOpenAcceptDialog, onClose)}
+                      >
+                        Accept
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+
+                <Dialog open={openRejectDialog} onOpenChange={setOpenRejectDialog}>
+                  <DialogContent className="bg-white z-[1500]">
+                    <DialogHeader>
+                      <DialogTitle>Confirm Rejection</DialogTitle>
+                    </DialogHeader>
+                    <DialogDescription>Are you sure you want to Reject this student request ?</DialogDescription>
+                    <DialogFooter>
+                      <Button variant="secondary" onClick={() => setOpenRejectDialog(false)} className="border-2">
+                        Cancel
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        onClick={() => handleReject(formData.form_number, setOpenRejectDialog, onClose)}
+                      >
+                        Reject
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+
+                <Dialog open={openApproveDialog} onOpenChange={setOpenApproveDialog}>
+                  <DialogContent className="bg-white z-[1500]">
+                    <DialogHeader>
+                      <DialogTitle>Confirm Approval</DialogTitle>
+                    </DialogHeader>
+                    <DialogDescription>Are you sure you want to Approve this student request ?</DialogDescription>
+                    <DialogFooter>
+                      <Button variant="secondary" onClick={() => setOpenApproveDialog(false)} className="border-2">
+                        Cancel
+                      </Button>
+                      <Button
+                        className="bg-blue-100 text-blue-800 hover:border-blue-800 border "
+                        onClick={() => handleApprove(formData.form_number, setOpenApproveDialog, onClose)}
+                      >
+                        Approve
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </div>
             ) : (
               <div className="justify-center items-center h-fit w-full flex flex-col">

@@ -17,13 +17,10 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url)
     const formStatus = searchParams.get("formStatus")
 
-    // Select books by formStatus
-    console.log("formStatus", formStatus)
     const forms = await db
       .select()
       .from(formsTable)
       .where(eq(formsTable.request_status, formStatus || "Pending"))
-    console.log("Filtered by formStatus:", forms)
 
     return NextResponse.json({ success: true, data: forms }, { status: 200 })
   } catch (err: any) {

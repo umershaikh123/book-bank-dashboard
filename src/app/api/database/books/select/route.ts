@@ -17,18 +17,16 @@ export async function GET(req: Request) {
 
     const { searchParams } = new URL(req.url)
     const category = searchParams.get("booksCategory")
-
+    console.log("category  ", category)
     // Select books by category
     if (category && category !== "all") {
       const books = await db.select().from(booksTable).where(eq(booksTable.category, category))
-      console.log("Filtered by category:", books)
-
+      console.log("category books", books)
       return NextResponse.json({ success: true, data: books }, { status: 200 })
     }
 
     // Select all books
     const books = await db.select().from(booksTable)
-    console.log("All books:", books)
 
     return NextResponse.json({ success: true, data: books }, { status: 200 })
   } catch (err: any) {

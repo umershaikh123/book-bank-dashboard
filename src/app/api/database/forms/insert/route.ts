@@ -9,16 +9,10 @@ import { sql } from "drizzle-orm"
 const db = drizzle(process.env.DATABASE_URL || "")
 // Define Zod validation schema for forms
 const formSchema = z.object({
-  student_cnic: z
-    .string()
-    .regex(/^\d{5}-\d{7}-\d{1}$/, "Invalid CNIC format")
-    .nonempty(),
+  student_cnic: z.string().min(1, "cnic required"),
   name: z.string().min(1, "Name is required"),
   father_name: z.string().min(1, "Father name is required"),
-  mobile: z
-    .string()
-    .regex(/^0\d{3}-\d{7}$/, "Invalid mobile number format")
-    .nonempty(),
+  mobile: z.string().min(1, "mobile no required"),
   address: z.string().min(1, "Address is required"),
   books_required: z.array(
     z.object({
@@ -54,7 +48,7 @@ export async function POST(req: Request) {
     const { student_cnic, name, father_name, mobile, address, books_required, book_return_date } = parsedData.data
 
     const bookTitles = books_required.map((book: { book_title: string }) => book.book_title)
-    console.log("bookTitles ", bookTitles)
+
     const books = await db
       .select({ title: booksTable.title, availableCopies: booksTable.availableCopies })
       .from(booksTable)
@@ -67,9 +61,6 @@ export async function POST(req: Request) {
 
     const unavailableBooks = books.filter((book) => book.availableCopies < 1)
 
-    console.log("books", books)
-    console.log("unavailableBooks", unavailableBooks)
-    console.log("unavailableBooks.length", unavailableBooks.length)
     if (unavailableBooks.length > 0) {
       const unavailableTitles = unavailableBooks.map((book) => book.title).join(", ")
       return NextResponse.json(

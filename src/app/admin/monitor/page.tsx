@@ -57,7 +57,7 @@ function useFetchForms(borrowed_status: "borrowed" | "returned" | "NotReturned")
         throw new Error(errorData.error || "Failed to fetched Form")
       }
       const result = await response.json()
-      console.log("response", result)
+
       const formattedData = result.data.map((form: FormData) => ({
         ...form,
         book_return_date: formatDate(form.book_return_date),

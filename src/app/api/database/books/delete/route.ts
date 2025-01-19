@@ -23,7 +23,6 @@ export async function DELETE(req: Request) {
 
     // Parse the incoming request body
     const body = await req.json()
-    console.log("Request body:", body)
 
     // Validate the incoming data using Zod
     const parsedData = deleteBookSchema.safeParse(body)

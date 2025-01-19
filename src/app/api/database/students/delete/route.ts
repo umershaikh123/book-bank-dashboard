@@ -8,10 +8,7 @@ export const dynamic = "force-dynamic"
 
 // Zod validation schema for student deletion
 const deleteStudentSchema = z.object({
-  mobile: z
-    .string()
-    .min(1, "Mobile number is required")
-    .regex(/^\d{4}-\d{7}$/, "Invalid mobile format (e.g., 0332-9087421)"),
+  mobile: z.string().min(1, "mobile no required").optional(),
 })
 
 export async function DELETE(req: Request) {

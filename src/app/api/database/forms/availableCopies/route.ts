@@ -29,7 +29,7 @@ export async function PATCH(req: Request) {
     if (!form) {
       return NextResponse.json({ success: false, error: "Form not found" }, { status: 404 })
     }
-    console.log("form ", form)
+
     // Begin transaction to update book copies and form status
     await db.transaction(async (tx) => {
       // Adjust availableCopies for rejected or returned books

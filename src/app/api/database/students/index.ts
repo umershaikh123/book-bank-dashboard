@@ -22,10 +22,7 @@ export const studentSchema = z.object({
   name: z.string().min(1, "Name is required").optional(),
   father_name: z.string().min(1, "Father's name is required").optional(),
   cnic: z.string().min(1, "CNIC is required").optional(),
-  mobile: z
-    .string()
-    .min(1, "Mobile number is required")
-    .regex(/^\d{4}-\d{7}$/, "Invalid mobile format (e.g., 0332-9087421)"),
+  mobile: z.string().min(1, "mobile no required").optional(),
 
   email: z.string().email("Invalid email format").optional(),
   address: z.string().min(1, "Address is required").optional(),
