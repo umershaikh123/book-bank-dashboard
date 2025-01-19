@@ -53,10 +53,11 @@ export async function PUT(req: Request) {
       .where(eq(studentsTable.email, userEmail as any))
       .execute()
 
-    const updatedStudentData = db
+    const updatedStudentData = await db
       .select()
       .from(studentsTable)
       .where(eq(studentsTable.email, userEmail as any))
+      .execute()
 
     return NextResponse.json(
       { success: true, message: "Student updated successfully", updatedData: updatedStudentData },

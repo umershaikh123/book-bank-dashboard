@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { neon } from "@neondatabase/serverless"
 import bcrypt from "bcrypt"
 import { SignJWT } from "jose"
-
+import { StudentType } from "@/app/admin/students/column"
 const sql = neon(process.env.DATABASE_URL || "")
 const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET || "default-secret")
 
