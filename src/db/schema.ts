@@ -41,6 +41,7 @@ export const studentsTable = pgTable("students", {
   totalBooksNotReturned: integer("totalBooksNotReturned").notNull().default(0),
   created_at: timestamp("created_at").defaultNow(),
   updated_at: timestamp("updated_at").defaultNow(),
+  password: text("password").notNull(),
 })
 
 export const bookRequestsTable = pgTable("book_requests", {
