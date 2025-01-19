@@ -186,21 +186,6 @@ export default function RequestDrawer({
                       Reject
                     </Button>
                     <Button
-                      className="bg-blue-100 text-blue-800 hover:border-blue-800 border "
-                      size={"lg"}
-                      onClick={() => setOpenApproveDialog(true)}
-                    >
-                      Approve
-                    </Button>
-                  </div>
-                )}
-
-                {formData.request_status === "Accepted" && (
-                  <div className=" pt-8 w-full  flex  items-center justify-evenly pb-8">
-                    <Button variant="destructive" size={"lg"} onClick={() => setOpenRejectDialog(true)}>
-                      Reject
-                    </Button>
-                    <Button
                       className="bg-green-100 text-green-800 hover:border-green-800 border "
                       size={"lg"}
                       onClick={() => setOpenAcceptDialog(true)}
