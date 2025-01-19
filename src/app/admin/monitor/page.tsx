@@ -17,7 +17,7 @@ import { Form, columns } from "./column"
 // @ts-ignore
 import notFoundAnimation from "/public/animations/notFound.json"
 import { formatDate, calculateTimeDifference } from "@/lib/utils"
-interface BookRequired {
+export interface BookRequired {
   book_title: string
 }
 

@@ -3,7 +3,7 @@ import { verifyToken } from "@/utils/verifyToken"
 import { eq } from "drizzle-orm"
 import { drizzle } from "drizzle-orm/neon-serverless"
 import { sql } from "drizzle-orm"
-import { formsTable, booksTable } from "@/db/schema"
+import { formsTable, booksTable, studentsTable } from "@/db/schema"
 import { z } from "zod"
 
 const db = drizzle(process.env.DATABASE_URL || "")
@@ -38,16 +38,47 @@ export async function PUT(req: Request) {
       return NextResponse.json({ success: false, error: "Form not found" }, { status: 404 })
     }
 
-    const formData = form[0]
+    const formData: any = form[0]
 
     await db.transaction(async (tx) => {
       if (request_status === "Accepted") {
         const borrowed_status = "borrowed"
+
+        const student = await tx
+          .select()
+          .from(studentsTable)
+          .where(eq(studentsTable.student_cnic, formData.student_cnic))
+          .execute()
+
+        if (!student.length) {
+          throw new Error("Student not found")
+        }
+
+        const studentData = student[0]
+
+        const booksRequired = formData.books_required
+        const bookEntries = booksRequired.map((book: { book_title: string }) => ({
+          book_title: book.book_title,
+          return_date: formData.return_date,
+          borrowed_status: borrowed_status,
+        }))
+
+        await tx
+          .update(studentsTable)
+          .set({
+            totalBooksBorrowed: studentData.totalBooksBorrowed + 1,
+            book_history: [studentData.book_history || [], ...bookEntries],
+            current_borrowed: [...bookEntries],
+          })
+          .where(eq(studentsTable.student_cnic, formData.student_cnic))
+          .execute()
+
         await tx
           .update(formsTable)
           .set({ request_status, borrowed_status })
           .where(eq(formsTable.form_number, form_number))
           .execute()
+
         return NextResponse.json({ success: true, message: "Form updated successfully" }, { status: 200 })
       }
 
