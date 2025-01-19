@@ -12,7 +12,7 @@ export default function ForgotPassword() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const res = await fetch("/api/mobile/auth/reset-password", {
+    const res = await fetch("/api/mobile/auth/forgot-password", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
