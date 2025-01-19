@@ -59,15 +59,21 @@ export async function PUT(req: Request) {
         const booksRequired = formData.books_required
         const bookEntries = booksRequired.map((book: { book_title: string }) => ({
           book_title: book.book_title,
-          return_date: formData.return_date,
+          return_date: formData.book_return_date,
           borrowed_status: borrowed_status,
         }))
+        console.log("bookEntries", bookEntries)
 
+        console.log("studentData.book_history", studentData.book_history)
+
+        console.log("[studentData.book_history, ...bookEntries]", [studentData.book_history, ...bookEntries])
         await tx
           .update(studentsTable)
           .set({
             totalBooksBorrowed: studentData.totalBooksBorrowed + 1,
-            book_history: [studentData.book_history || [], ...bookEntries],
+
+            //@ts-ignore
+            book_history: studentData.book_history.length > 0 ? [...studentData.book_history, ...bookEntries] : [...bookEntries],
             current_borrowed: [...bookEntries],
           })
           .where(eq(studentsTable.student_cnic, formData.student_cnic))
