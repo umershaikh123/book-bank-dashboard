@@ -28,9 +28,9 @@ export const studentSchema = z.object({
   address: z.string().min(1, "Address is required").optional(),
   book_history: z.array(bookHistorySchema).optional(),
   current_borrowed: z.array(currentBorrowedSchema).optional(),
-  TotalBooksBorrowed: z.number().int().optional(),
-  TotalBooksReturned: z.number().int().optional(),
-  TotalNotReturnedBooks: z.number().int().optional(),
+  totalBooksBorrowed: z.number().int().optional(),
+  totalBooksReturned: z.number().int().optional(),
+  totalNotReturnedBooks: z.number().int().optional(),
   created_at: z.string().optional(),
   updated_at: z.string().optional(),
 })

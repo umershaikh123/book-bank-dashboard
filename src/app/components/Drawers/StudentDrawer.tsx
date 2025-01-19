@@ -37,7 +37,7 @@ export function StudentDrawer({
 
   return (
     <Drawer open={open} anchor="right" onClose={onClose}>
-      <Box className="w-[30rem] p-4 bg-white shadow-lg">
+      <Box className="w-[30rem]  px-4 pt-4 pb-16  bg-white shadow-lg">
         <h2 className="text-xl font-bold text-gray-800 mb-4">Student Details</h2>
         {isValidStudentData(studentData) ? (
           <>
