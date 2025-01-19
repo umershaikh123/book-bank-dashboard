@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/request-status",
+      "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/borrowed-status",
+      "schedule": "0 * * * *"
+    }
+  ]
+}

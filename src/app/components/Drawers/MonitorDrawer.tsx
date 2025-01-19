@@ -101,6 +101,11 @@ export function RequestMonitorDrawer({
                 <span className="max-w-[16rem] text-right">{formData.address}</span>
               </div>
 
+              <div className="flex justify-between mb-2">
+                <span className="font-semibold text-gray-600">Return Data:</span>
+                <span className="max-w-[16rem] text-right">{formData.book_return_date}</span>
+              </div>
+
               <div className="flex justify-between">
                 <span className="font-semibold text-gray-600">Borrowed Status:</span>
                 <span
