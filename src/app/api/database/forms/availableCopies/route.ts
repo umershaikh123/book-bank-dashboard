@@ -18,13 +18,7 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ success: false, error: "Invalid request body" }, { status: 400 })
     }
 
-    const form = await db
-      .select()
-      .from(formsTable)
-
-      // .where(formsTable.id.eq(formId)).first();
-      .where(eq(formsTable.form_number, formId))
-      .execute()
+    const form = await db.select().from(formsTable).where(eq(formsTable.form_number, formId)).execute()
 
     if (!form) {
       return NextResponse.json({ success: false, error: "Form not found" }, { status: 404 })

@@ -17,7 +17,7 @@ import {
 import notFoundAnimation from "/public/animations/notFound.json"
 import Lottie from "lottie-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import RequestDrawer from "@/app/components/Drawers/RequestDrawer"
+import { RequestMonitorDrawer } from "@/app/components/Drawers/MonitorDrawer"
 import { Input } from "@/components/ui/input"
 import { DataTablePagination } from "@/app/components/pagination"
 interface DataTableProps<TData, TValue> {
@@ -126,7 +126,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 
       <DataTablePagination table={table} />
 
-      {selectedRow && <RequestDrawer open={drawerOpen} onClose={closeDrawer} formData={selectedRow} />}
+      {selectedRow && <RequestMonitorDrawer open={drawerOpen} onClose={closeDrawer} formData={selectedRow} />}
     </div>
   )
 }

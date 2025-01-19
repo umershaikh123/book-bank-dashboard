@@ -10,7 +10,6 @@ export async function POST(req: Request) {
     const existingUser = await sql`
       SELECT 1 FROM students WHERE email = ${email} 
     `
-
     if (existingUser.length > 0) {
       return NextResponse.json({ success: false, error: "Email already exists" }, { status: 400 })
     }

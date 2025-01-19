@@ -2,8 +2,8 @@ import { NextResponse } from "next/server"
 import { verifyToken } from "@/utils/verifyToken"
 import { eq } from "drizzle-orm"
 import { drizzle } from "drizzle-orm/neon-serverless"
-
-import { formsTable } from "@/db/schema"
+import { sql } from "drizzle-orm"
+import { formsTable, booksTable } from "@/db/schema"
 import { z } from "zod"
 
 const db = drizzle(process.env.DATABASE_URL || "")
@@ -32,7 +32,41 @@ export async function PUT(req: Request) {
 
     const { form_number, request_status } = parsedData.data
 
-    await db.update(formsTable).set({ request_status }).where(eq(formsTable.form_number, form_number)).execute()
+    const form = await db.select().from(formsTable).where(eq(formsTable.form_number, form_number)).execute()
+
+    if (!form.length) {
+      return NextResponse.json({ success: false, error: "Form not found" }, { status: 404 })
+    }
+
+    const formData = form[0]
+
+    await db.transaction(async (tx) => {
+      if (request_status === "Accepted") {
+        const borrowed_status = "borrowed"
+        await tx
+          .update(formsTable)
+          .set({ request_status, borrowed_status })
+          .where(eq(formsTable.form_number, form_number))
+          .execute()
+        return NextResponse.json({ success: true, message: "Form updated successfully" }, { status: 200 })
+      }
+
+      // If request_status is "Rejected", update availableCopies
+      if (request_status === "Rejected") {
+        //@ts-ignore
+        for (const book of formData.books_required) {
+          const { book_title } = book
+
+          await tx
+            .update(booksTable)
+            .set({ availableCopies: sql`${booksTable.availableCopies} + 1` })
+            .where(eq(booksTable.title, book_title))
+            .execute()
+        }
+      }
+
+      await tx.update(formsTable).set({ request_status }).where(eq(formsTable.form_number, form_number)).execute()
+    })
 
     return NextResponse.json({ success: true, message: "Form updated successfully" }, { status: 200 })
   } catch (err) {
