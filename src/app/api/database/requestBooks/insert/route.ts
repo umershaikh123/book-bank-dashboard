@@ -6,6 +6,7 @@ import { z } from "zod"
 // Define Zod validation schema
 const bookRequestSchema = z.object({
   book_title: z.string().min(1, "Book title is required"),
+  student_cnic: z.string().min(1, "Cnic is required"),
 })
 
 const sql = neon(process.env.DATABASE_URL || "")
@@ -26,11 +27,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, error: parsedData.error.errors }, { status: 400 })
     }
 
-    const { book_title } = parsedData.data
+    const { book_title, student_cnic } = parsedData.data
 
     await sql`
-      INSERT INTO book_requests (book_title)
-      VALUES (${book_title})
+      INSERT INTO book_requests (book_title , student_cnic)
+      VALUES (${book_title}, ${student_cnic})
     `
 
     return NextResponse.json({ success: true, message: "Book request inserted successfully" }, { status: 200 })

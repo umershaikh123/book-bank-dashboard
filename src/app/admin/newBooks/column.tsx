@@ -6,18 +6,19 @@ import ImportExportIcon from "@mui/icons-material/ImportExport"
 import { useState } from "react"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 
-import { Toast } from "@/components/ui/toast"
 import { useToast } from "@/hooks/use-toast"
 import { queryClient } from "@/utils/Provider"
 export type BookRequestType = {
   book_title: string
   serial_no: number
   timestamp: string
+  student_cnic: string
 }
 
 export const columns: ColumnDef<BookRequestType>[] = [
   { accessorKey: "serial_no", header: "Serial No" },
   { accessorKey: "book_title", header: "Book Title" },
+  { accessorKey: "student_cnic", header: "student_cnic" },
   {
     accessorKey: "timestamp",
 
