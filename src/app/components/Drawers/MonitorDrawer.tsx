@@ -9,6 +9,10 @@ import Lottie from "lottie-react"
 
 // @ts-ignore
 import notFoundAnimation from "/public/animations/notFound.json"
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { useState } from "react"
+import { useHandleFormStatus } from "../handleBorrowedStatus"
 const fetchBooks = async (booksRequired: { book_title: string }[] | undefined) => {
   if (!booksRequired || booksRequired.length === 0) return []
   const token = localStorage.getItem("auth_token")
@@ -57,7 +61,10 @@ export function RequestMonitorDrawer({
     enabled: isValidFormData(formData),
   })
 
-  console.log("data", formData)
+  const [openNotReturnedDialog, setOpenNotReturnedDialog] = useState(false)
+
+  const [openReturnedDialog, setOpenReturnedDialog] = useState(false)
+  const { handleNotReturned, handleReturned } = useHandleFormStatus()
 
   return (
     <Drawer open={open} anchor="right" onClose={onClose}>
@@ -154,6 +161,61 @@ export function RequestMonitorDrawer({
                     </div>
                   </div>
                 ))}
+
+                {formData.borrowed_status === "borrowed" && (
+                  <div className=" pt-8 w-full  flex  items-center justify-evenly pb-8">
+                    <Button variant="destructive" size={"lg"} onClick={() => setOpenNotReturnedDialog(true)}>
+                      Not Returned
+                    </Button>
+                    <Button
+                      className="bg-green-100 text-green-800 hover:border-green-800 border "
+                      size={"lg"}
+                      onClick={() => setOpenReturnedDialog(true)}
+                    >
+                      Returned
+                    </Button>
+                  </div>
+                )}
+
+                <Dialog open={openReturnedDialog} onOpenChange={setOpenReturnedDialog}>
+                  <DialogContent className="bg-white z-[1500]">
+                    <DialogHeader>
+                      <DialogTitle>Confirm Acceptance</DialogTitle>
+                    </DialogHeader>
+                    <DialogDescription>Are you sure you want to Accept this student request ?</DialogDescription>
+                    <DialogFooter>
+                      <Button variant="secondary" onClick={() => setOpenReturnedDialog(false)} className="border-2">
+                        Cancel
+                      </Button>
+                      <Button
+                        className="bg-green-100 text-green-800 hover:border-green-800 border "
+                        onClick={() => handleReturned(formData.form_number, setOpenReturnedDialog, onClose)}
+                      >
+                        Return
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+
+                <Dialog open={openNotReturnedDialog} onOpenChange={setOpenNotReturnedDialog}>
+                  <DialogContent className="bg-white z-[1500]">
+                    <DialogHeader>
+                      <DialogTitle>Confirm Rejection</DialogTitle>
+                    </DialogHeader>
+                    <DialogDescription>Are you sure you want to Reject this student request ?</DialogDescription>
+                    <DialogFooter>
+                      <Button variant="secondary" onClick={() => setOpenNotReturnedDialog(false)} className="border-2">
+                        Cancel
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        onClick={() => handleNotReturned(formData.form_number, setOpenNotReturnedDialog, onClose)}
+                      >
+                        Not Return
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </div>
             ) : (
               <div className="justify-center items-center h-fit w-full flex flex-col">
