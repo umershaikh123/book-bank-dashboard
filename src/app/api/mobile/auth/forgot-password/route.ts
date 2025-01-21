@@ -12,10 +12,10 @@ export const dynamic = "force-dynamic"
 
 const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET || "default-secret")
 const transporter = nodemailer.createTransport({
-  service: "gmail", // You can use any email service (Gmail, SendGrid, etc.)
+  service: "gmail",
   auth: {
-    user: process.env.EMAIL_USER, // Set your email here
-    pass: process.env.EMAIL_PASSWORD, // Set your email password or an app password if 2FA is enabled
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
   },
 })
 
@@ -39,14 +39,16 @@ export async function POST(req: Request) {
       .sign(SECRET_KEY)
 
     // Create the reset link
-    const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`
+    const resetLink = `http://localhost:3000/student/resetPassword?token=${resetToken}`
 
     // Send the email with the reset link
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
       subject: "Password Reset Request",
-      html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`,
+      html: `
+      <h4>You have requested to reset your ICC Book Bank account password </h4>
+      <p>Click <a href="${resetLink}">here</a> to reset your password.</p>`,
     }
 
     await transporter.sendMail(mailOptions)

@@ -24,7 +24,7 @@ export async function POST(req: Request) {
       .from(studentsTable)
       .where(eq(studentsTable.email, payload.email as any))
       .execute()
-
+    console.log("studentData", studentData)
     if (!studentData.length) {
       return NextResponse.json({ success: false, error: "Student not found" }, { status: 404 })
     }
