@@ -37,7 +37,7 @@ export default function Page() {
       const data = await res.json()
 
       if (data.success) {
-        toast({ title: "Success", description: "Password reset successfully", variant: "default" })
+        toast({ title: "Success", description: "Password reset successfully", variant: "success" })
         setIsResetSuccessful(true)
       } else {
         toast({ title: "Error", description: `${data.error}`, variant: "destructive" })
@@ -50,7 +50,7 @@ export default function Page() {
   }
   return (
     <div className="flex min-h-screen justify-center items-center bg-[var(--primary)] rounded-[2rem] p-8">
-      <div className="bg-white px-8 py-8 rounded-3xl w-[20rem]">
+      <div className="bg-white px-8 py-8 rounded-3xl w-[20rem] shadow-xl">
         {isResetSuccessful ? (
           <div className="text-center">
             <h1 className="text-2xl w-full font-bold text-green-600 mb-4">Password Reset Successful</h1>

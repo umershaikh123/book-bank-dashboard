@@ -28,7 +28,7 @@ export default function Page() {
       const data = await res.json()
 
       if (data.success) {
-        toast({ title: "Success", description: "Password reset email sent successfully", variant: "default" })
+        toast({ title: "Success", description: "Password reset email sent successfully", variant: "success" })
       } else {
         toast({ title: "Error", description: `${data.error}`, variant: "destructive" })
       }
@@ -41,7 +41,7 @@ export default function Page() {
 
   return (
     <div className="flex min-h-screen justify-center items-center bg-[var(--primary)] rounded-[2rem] p-8">
-      <div className="bg-white px-8 py-8 rounded-3xl w-[20rem] h-[15rem]  ">
+      <div className="bg-white px-8 py-8 rounded-3xl w-[20rem] h-[15rem]  shadow-xl ">
         <h1 className="text-xl font-medium w-full text-center mb-4">Forgot Password</h1>
         <form onSubmit={handleSubmit}>
           <Label htmlFor="email" className="text-sm font-medium ">

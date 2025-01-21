@@ -15,7 +15,7 @@ export function useHandleFormStatus() {
           console.log("Form rejected successfully:", data)
           setOpenDialog(false)
           closeDrawer()
-          toast({ title: "Success", description: "Form request Rejected successfully", variant: "default" })
+          toast({ title: "Success", description: "Form request Rejected successfully", variant: "success" })
           queryClient.invalidateQueries()
         },
         onError: (error) => {
@@ -34,7 +34,7 @@ export function useHandleFormStatus() {
           console.log("Form approved successfully:", data)
           setOpenDialog(false)
           closeDrawer()
-          toast({ title: "Success", description: "Form request Approved successfully", variant: "default" })
+          toast({ title: "Success", description: "Form request Approved successfully", variant: "success" })
           queryClient.invalidateQueries()
         },
         onError: (error) => {
@@ -53,7 +53,7 @@ export function useHandleFormStatus() {
           console.log("Form accepted successfully:", data)
           setOpenDialog(false)
           closeDrawer()
-          toast({ title: "Success", description: "Form request Accepted successfully", variant: "default" })
+          toast({ title: "Success", description: "Form request Accepted successfully", variant: "success" })
           queryClient.invalidateQueries()
         },
         onError: (error) => {

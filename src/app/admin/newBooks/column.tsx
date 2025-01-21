@@ -49,7 +49,7 @@ export const columns: ColumnDef<BookRequestType>[] = [
           console.log("response", await response.json())
           if (response.ok) {
             console.log("response ok")
-            toast({ title: "Success", description: "Book request deleted successfully", variant: "default" })
+            toast({ title: "Success", description: "Book request deleted successfully", variant: "success" })
             queryClient.invalidateQueries()
           } else {
             console.log("response not ok")

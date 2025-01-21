@@ -15,7 +15,7 @@ export function useHandleFormStatus() {
           console.log("Form updated successfully:", data)
           setOpenDialog(false)
           closeDrawer()
-          toast({ title: "Success", description: "Borrowed Status changed to Not Returned successfully", variant: "default" })
+          toast({ title: "Success", description: "Borrowed Status changed to Not Returned successfully", variant: "success" })
           queryClient.invalidateQueries()
         },
         onError: (error) => {
@@ -35,7 +35,7 @@ export function useHandleFormStatus() {
           setOpenDialog(false)
           closeDrawer()
 
-          toast({ title: "Success", description: "Borrowed Status changed to  Returned successfully", variant: "default" })
+          toast({ title: "Success", description: "Borrowed Status changed to  Returned successfully", variant: "success" })
           queryClient.invalidateQueries()
         },
         onError: (error) => {

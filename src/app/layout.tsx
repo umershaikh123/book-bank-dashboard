@@ -3,6 +3,7 @@ import QueryProvider from "@/utils/Provider"
 import "./globals.css"
 import "react-toastify/dist/ReactToastify.css"
 import { IBM_Plex_Mono } from "next/font/google"
+import { Toaster } from "@/components/ui/toaster"
 export const metadata: Metadata = {
   title: "Book Bank",
   description: "Book Bank is an app for lending out free books from Islamic Culture Center",
@@ -21,6 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${IBM_Plex_MonoFont.className} antialiased max-h-screen max-w-[100vw]`}>
+        <Toaster />
         <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
