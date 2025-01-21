@@ -5,7 +5,8 @@ import { drizzle } from "drizzle-orm/neon-serverless"
 import { sql } from "drizzle-orm"
 import { formsTable, booksTable, studentsTable } from "@/db/schema"
 import { z } from "zod"
-
+import { notificationsTable } from "@/db/schema"
+import { NotificationMessage } from "@/db/schema"
 const db = drizzle(process.env.DATABASE_URL || "")
 
 const updateFormSchema = z.object({
@@ -40,21 +41,17 @@ export async function PUT(req: Request) {
 
     const formData: any = form[0]
 
+    const student = await db.select().from(studentsTable).where(eq(studentsTable.student_cnic, formData.student_cnic)).execute()
+
+    if (!student.length) {
+      throw new Error("Student not found")
+    }
+
+    const studentData = student[0]
+
     await db.transaction(async (tx) => {
       if (request_status === "Accepted") {
         const borrowed_status = "borrowed"
-
-        const student = await tx
-          .select()
-          .from(studentsTable)
-          .where(eq(studentsTable.student_cnic, formData.student_cnic))
-          .execute()
-
-        if (!student.length) {
-          throw new Error("Student not found")
-        }
-
-        const studentData = student[0]
 
         const booksRequired = formData.books_required
         const bookEntries = booksRequired.map((book: { book_title: string }) => ({
@@ -85,11 +82,20 @@ export async function PUT(req: Request) {
           .where(eq(formsTable.form_number, form_number))
           .execute()
 
+        const message = {
+          text: `Your request with form number ${formData.form_number} has been Accepted.`,
+          severity: "normal" as const,
+        }
+        await tx
+          .insert(notificationsTable)
+          .values({ email: studentData.email, messages: message, created_at: new Date(), updated_at: new Date() })
+          .execute()
+
         return NextResponse.json({ success: true, message: "Form updated successfully" }, { status: 200 })
       }
 
       // If request_status is "Rejected", update availableCopies
-      if (request_status === "Rejected") {
+      else if (request_status === "Rejected") {
         //@ts-ignore
         for (const book of formData.books_required) {
           const { book_title } = book
@@ -100,6 +106,25 @@ export async function PUT(req: Request) {
             .where(eq(booksTable.title, book_title))
             .execute()
         }
+
+        const message = {
+          text: `Your ${formData.form_number} has been rejected`,
+          severity: "urgent" as const,
+        }
+
+        await tx
+          .insert(notificationsTable)
+          .values({ email: studentData.email, messages: message, created_at: new Date(), updated_at: new Date() })
+          .execute()
+      } else if (request_status === "Approved") {
+        const message = {
+          text: `Your request with form number ${formData.form_number} has been approved.`,
+          severity: "normal" as const,
+        }
+        await tx
+          .insert(notificationsTable)
+          .values({ email: studentData.email, messages: message, created_at: new Date(), updated_at: new Date() })
+          .execute()
       }
 
       await tx.update(formsTable).set({ request_status }).where(eq(formsTable.form_number, form_number)).execute()

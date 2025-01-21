@@ -5,7 +5,7 @@ import { drizzle } from "drizzle-orm/neon-serverless"
 import { sql } from "drizzle-orm"
 import { formsTable, booksTable, studentsTable } from "@/db/schema"
 import { z } from "zod"
-
+import { notificationsTable } from "@/db/schema"
 const db = drizzle(process.env.DATABASE_URL || "")
 
 const updateFormSchema = z.object({
@@ -40,19 +40,16 @@ export async function PUT(req: Request) {
 
     const formData: any = form[0]
     console.log("formData", formData)
+
+    const student = await db.select().from(studentsTable).where(eq(studentsTable.student_cnic, formData.student_cnic)).execute()
+
+    if (!student.length) {
+      throw new Error("Student not found")
+    }
+
+    const studentData = student[0]
     await db.transaction(async (tx) => {
       if (borrowed_status === "returned") {
-        const student = await tx
-          .select()
-          .from(studentsTable)
-          .where(eq(studentsTable.student_cnic, formData.student_cnic))
-          .execute()
-
-        if (!student.length) {
-          throw new Error("Student not found")
-        }
-
-        const studentData = student[0]
         const booksRequired = formData.books_required
         const bookEntries = booksRequired.map((book: { book_title: string }) => ({
           book_title: book.book_title,
@@ -88,21 +85,18 @@ export async function PUT(req: Request) {
             .where(eq(booksTable.title, book_title))
             .execute()
         }
+
+        const message = {
+          text: `You have successfully returned the books of form number ${formData.form_number}`,
+          severity: "normal" as const,
+        }
+        await tx
+          .insert(notificationsTable)
+          .values({ email: studentData.email, messages: message, created_at: new Date(), updated_at: new Date() })
+          .execute()
       }
 
       if (borrowed_status === "NotReturned") {
-        const student = await tx
-          .select()
-          .from(studentsTable)
-          .where(eq(studentsTable.student_cnic, formData.student_cnic))
-          .execute()
-
-        if (!student.length) {
-          throw new Error("Student not found")
-        }
-
-        const studentData = student[0]
-
         const booksRequired = formData.books_required
         const bookEntries = booksRequired.map((book: { book_title: string }) => ({
           book_title: book.book_title,
@@ -124,6 +118,15 @@ export async function PUT(req: Request) {
             book_history: updatedBookHistory,
           })
           .where(eq(studentsTable.student_cnic, formData.student_cnic))
+          .execute()
+
+        const message = {
+          text: `Please return your books , the return date has been passed. form number ${formData.form_number}`,
+          severity: "normal" as const,
+        }
+        await tx
+          .insert(notificationsTable)
+          .values({ email: studentData.email, messages: message, created_at: new Date(), updated_at: new Date() })
           .execute()
       }
 

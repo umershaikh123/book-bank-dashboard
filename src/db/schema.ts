@@ -1,5 +1,5 @@
 import { pgTable, text, integer, serial, jsonb, timestamp, date } from "drizzle-orm/pg-core"
-
+import { InferModel } from "drizzle-orm"
 // Define the books table
 export const booksTable = pgTable("books", {
   title: text("title").primaryKey(),
@@ -49,4 +49,18 @@ export const bookRequestsTable = pgTable("book_requests", {
   student_cnic: text("student_cnic").notNull(),
   serial_no: serial("serial_no").notNull(),
   timestamp: timestamp("timestamp").defaultNow(),
+})
+
+export type NotificationSeverity = "normal" | "urgent" | "reminder"
+
+export type NotificationMessage = {
+  text: string
+  severity: NotificationSeverity
+}
+export const notificationsTable = pgTable("notifications", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull(),
+  messages: jsonb("messages").$type<NotificationMessage>().notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
 })

@@ -12,7 +12,7 @@ export async function GET(req: Request) {
     const authHeader = req.headers.get("authorization")
     await verifyToken(authHeader || "")
 
-    const result = await db.select().from(bookRequestsTable)
+    const result = await db.select().from(bookRequestsTable).execute()
 
     return NextResponse.json({ success: true, data: result }, { status: 200 })
   } catch (err: any) {
