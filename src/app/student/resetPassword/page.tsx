@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import { useSearchParams } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
 
-export default function ResetPassword() {
+export default function Page() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [isResetSuccessful, setIsResetSuccessful] = useState(false)
@@ -31,7 +31,7 @@ export default function ResetPassword() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ token: token, newPassword: password }),
+        body: JSON.stringify({ token: token || "", newPassword: password }),
       })
 
       const data = await res.json()

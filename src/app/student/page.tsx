@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
 
-export default function ForgotPassword() {
+export default function Page() {
   const [email, setEmail] = useState("")
 
   const { toast } = useToast()
