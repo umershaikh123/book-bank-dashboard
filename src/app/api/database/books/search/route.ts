@@ -12,7 +12,7 @@ const db = drizzle(process.env.DATABASE_URL || "")
 const searchQuerySchema = z.object({
   query: z.string().min(1, "Search query is required"),
 })
-
+export const dynamic = "force-dynamic"
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url)
