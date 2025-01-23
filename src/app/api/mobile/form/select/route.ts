@@ -35,7 +35,7 @@ export async function GET(req: Request) {
       .select()
       .from(formsTable)
       .where(sql`${formsTable.borrowed_status} = 'not_yet' AND ${formsTable.student_cnic} = ${studentData[0].student_cnic}`)
-      // .where(sql`${formsTable.borrowed_status} = 'not_yet' AND ${formsTable.student_cnic} = '5200010215153'`)
+
       .execute()
     console.log("forms", forms)
     if (!forms.length) {

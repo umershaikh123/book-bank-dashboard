@@ -34,23 +34,22 @@ export async function GET(req: Request) {
       .from(studentsTable)
       .where(eq(studentsTable.email, studentEmail as any))
       .execute()
-
+    console.log("studentData", studentData)
     if (!studentData.length) {
       return NextResponse.json({ success: false, error: "Student not found" }, { status: 404 })
     }
 
-    // Fetch all forms for the student where borrowed_status is "borrowed", "returned", or "NotReturned"
     const forms = await db
       .select()
       .from(formsTable)
-      // .where(sql`${formsTable.borrowed_status} IN ('borrowed', 'returned', 'NotReturned') AND ${formsTable.student_cnic} = ${studentData[0].student_cnic}`)
       .where(
-        sql`${formsTable.borrowed_status} IN ('borrowed', 'returned', 'NotReturned') AND ${formsTable.student_cnic} = '5200010215153'`
+        sql`${formsTable.borrowed_status} IN ('borrowed', 'returned', 'NotReturned') AND ${formsTable.student_cnic} = ${studentData[0].student_cnic}`
       )
+
       .execute()
 
     if (!forms.length) {
-      return NextResponse.json({ success: true, data: [], message: "No forms found" }, { status: 200 })
+      return NextResponse.json({ success: true, data: [], message: "No borrowed forms found" }, { status: 200 })
     }
 
     // Extract book titles from forms
