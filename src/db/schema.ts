@@ -31,7 +31,7 @@ export const studentsTable = pgTable("students", {
   email: text("email").primaryKey(),
   name: text("name").notNull(),
   father_name: text("father_name").notNull(),
-  student_cnic: text("cnic").notNull(),
+  student_cnic: text("student_cnic").notNull(),
   mobile: text("mobile").notNull(),
   address: text("address").notNull(),
   book_history: jsonb("book_history").notNull().default([]),
