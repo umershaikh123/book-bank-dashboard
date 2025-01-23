@@ -60,7 +60,7 @@ export async function PUT(req: Request) {
       .execute()
 
     return NextResponse.json(
-      { success: true, message: "Student updated successfully", updatedData: updatedStudentData },
+      { success: true, message: "Student updated successfully", updatedData: updatedStudentData[0] },
       { status: 200 }
     )
   } catch (err) {
