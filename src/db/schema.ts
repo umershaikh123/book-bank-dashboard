@@ -46,7 +46,7 @@ export const studentsTable = pgTable("students", {
 
 export const bookRequestsTable = pgTable("book_requests", {
   book_title: text("book_title").primaryKey(),
-  student_cnic: text("student_cnic").notNull(),
+  email: text("email").notNull(),
   serial_no: serial("serial_no").notNull(),
   timestamp: timestamp("timestamp").defaultNow(),
 })

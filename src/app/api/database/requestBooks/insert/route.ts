@@ -2,11 +2,11 @@ import { NextResponse } from "next/server"
 import { neon } from "@neondatabase/serverless"
 import { verifyToken } from "@/utils/verifyToken"
 import { z } from "zod"
-
+import { jwtVerify } from "jose"
+const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET || "default-secret")
 // Define Zod validation schema
 const bookRequestSchema = z.object({
   book_title: z.string().min(1, "Book title is required"),
-  student_cnic: z.string().min(1, "Cnic is required"),
 })
 
 const sql = neon(process.env.DATABASE_URL || "")
@@ -15,7 +15,17 @@ export const dynamic = "force-dynamic"
 export async function POST(req: Request) {
   try {
     const authHeader = req.headers.get("authorization")
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return NextResponse.json({ success: false, error: "Authorization token is missing or invalid" }, { status: 401 })
+    }
     await verifyToken(authHeader || "")
+    const token = authHeader.split(" ")[1]
+    const { payload } = await jwtVerify(token, SECRET_KEY)
+    const userEmail = payload.email
+    console.log("useEmail")
+    if (!userEmail) {
+      return NextResponse.json({ success: false, error: "Invalid token: email not found" }, { status: 401 })
+    }
 
     const body = await req.json()
 
@@ -27,11 +37,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, error: parsedData.error.errors }, { status: 400 })
     }
 
-    const { book_title, student_cnic } = parsedData.data
+    const { book_title } = parsedData.data
 
     await sql`
-      INSERT INTO book_requests (book_title , student_cnic)
-      VALUES (${book_title}, ${student_cnic})
+      INSERT INTO book_requests (book_title , email)
+      VALUES (${book_title}, ${userEmail})
     `
 
     return NextResponse.json({ success: true, message: "Book request inserted successfully" }, { status: 200 })

@@ -12,13 +12,13 @@ export type BookRequestType = {
   book_title: string
   serial_no: number
   timestamp: string
-  student_cnic: string
+  email: string
 }
 
 export const columns: ColumnDef<BookRequestType>[] = [
   { accessorKey: "serial_no", header: "Serial No" },
   { accessorKey: "book_title", header: "Book Title" },
-  { accessorKey: "student_cnic", header: "student_cnic" },
+  { accessorKey: "email", header: "email" },
   {
     accessorKey: "timestamp",
 
