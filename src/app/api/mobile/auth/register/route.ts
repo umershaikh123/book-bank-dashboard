@@ -25,7 +25,7 @@ export async function POST(req: Request) {
 
     // Insert the new student into the database
     await sql`
-      INSERT INTO students (email, name, cnic, father_name, mobile, address, password) 
+      INSERT INTO students (email, name, student_cnic, father_name, mobile, address, password) 
       VALUES (${email}, ${name}, ${cnic}, ${father_name}, ${mobile}, ${address}, ${hashedPassword})
     `
 
