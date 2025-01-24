@@ -118,9 +118,7 @@ export async function PUT(req: Request) {
           .execute()
       } else if (request_status === "Approved") {
         const message = {
-          text: `Your request with form number ${formData.form_number} has been approved.
-          Please collect your books from ICC book bank with in 24 hours
-          `,
+          text: `Your request with form number ${formData.form_number} has been approved. Please collect your books from ICC book bank with in 24 hours`,
           severity: "normal" as const,
         }
         await tx
