@@ -8,9 +8,8 @@ export async function POST(req: Request) {
   try {
     const { email, name, father_name, mobile, address, password, cnic } = await req.json()
 
-    // Check if email, mobile, or cnic already exist in the database
     const existingUser = await sql`
-      SELECT 1 FROM students WHERE email = ${email} OR mobile = ${mobile} OR cnic = ${cnic}
+      SELECT 1 FROM students WHERE email = ${email} OR mobile = ${mobile} OR student_cnic = ${cnic}
     `
 
     if (existingUser.length > 0) {
