@@ -60,23 +60,25 @@ export async function POST(req: Request) {
       const { request_status, borrowed_status } = lastForm[0]
 
       if (["Pending", "Approved", "Accepted"].includes(request_status)) {
-        return NextResponse.json(
-          {
-            success: false,
-            error: "You have already submitted a previous book request.",
-          },
-          { status: 400 }
-        )
-      }
+        if (borrowed_status === "borrowed") {
+          return NextResponse.json(
+            {
+              success: false,
+              error: "You currently have borrowed a set of books. Return it before submitting a new request.",
+            },
+            { status: 400 }
+          )
+        }
 
-      if (borrowed_status === "borrowed") {
-        return NextResponse.json(
-          {
-            success: false,
-            error: "You currently have a borrowed book. Return it before submitting a new request.",
-          },
-          { status: 400 }
-        )
+        if (borrowed_status === "not_yet") {
+          return NextResponse.json(
+            {
+              success: false,
+              error: "You have already submitted a previous book request.",
+            },
+            { status: 400 }
+          )
+        }
       }
     }
     const bookTitles = books_required.map((book: { book_title: string }) => book.book_title)
