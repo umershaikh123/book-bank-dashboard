@@ -21,6 +21,8 @@ import Link from "next/link"
 import Image from "next/image"
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh"
 import PersonIcon from "@mui/icons-material/Person"
+import SwipeableDrawer from "@mui/material/SwipeableDrawer"
+import Button from "@mui/material/Button"
 const style = {
   position: "absolute",
   top: "50%",
@@ -382,7 +384,15 @@ export const DeleteBookPopover = ({
   )
 }
 
-export const MenuPopover = ({ open, handleClose }: { open: boolean; handleClose: () => void }) => {
+export const MenuPopover = ({
+  open,
+  handleClose,
+  handleOpen,
+}: {
+  open: boolean
+  handleClose: () => void
+  handleOpen: () => void
+}) => {
   const router = useRouter()
   const handleLogout = async () => {
     await fetch("/api/logout", {
@@ -395,82 +405,58 @@ export const MenuPopover = ({ open, handleClose }: { open: boolean; handleClose:
 
   return (
     <div>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={open}
-        closeAfterTransition
-        onClose={handleClose}
-        slots={{ backdrop: Backdrop }}
-        slotProps={{
-          backdrop: {
-            timeout: 500,
-          },
-        }}
-      >
-        <Fade in={open}>
-          <Box
-            sx={{
-              position: "absolute",
-              top: "25%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-
-              height: "20rem",
-              bgcolor: "background.paper",
-              boxShadow: 24,
-              borderRadius: "24px",
-              px: 8,
-              py: 2,
-            }}
-            className=" sm:w-[30rem] w-fit"
-          >
-            <div className="flex flex-col space-y-6 items-start  justify-normal  w-full   ">
-              <Link href={"/admin/books?booksCategory=all"} className="flex items-center space-x-2 ">
-                <Image src={bookIcon} width={35} height={35} alt={`Books icon`} />
-
-                <div className="flex flex-col">
-                  <div className="text-xl flex -mb-1   transition-all duration-150 ease-in"> Books </div>
-                </div>
-              </Link>
-
-              <Link href={"/admin/request?formStatus=Pending"} className="flex items-center space-x-2  ">
-                <Image src={requestIcon} width={35} height={35} alt={`requestIcon `} className=" " />
-                <div className="flex flex-col">
-                  <div className="text-xl flex -mb-1   transition-all duration-150 ease-in"> Request </div>
-                </div>
-              </Link>
-
-              <Link href={"/admin/monitor"} className="flex items-center space-x-2  ">
-                <Image src={monitoringIcon} width={35} height={35} alt={`monitoringIcon`} className=" " />
-                <div className="flex flex-col">
-                  <div className="text-xl flex -mb-2   transition-all duration-150 ease-in"> Monitor </div>
-                </div>
-              </Link>
-
-              <Link href={"/admin/newBooks?borrowed_status=borrowed"} className="flex items-center space-x-2  ">
-                <PriorityHighIcon sx={{ fontSize: "35px" }} className=" -mt-1" />
-
-                <div className="flex flex-col">
-                  <div className="text-xl flex -mb-2 hover:text-2xl transition-all duration-150 ease-in"> New Books </div>
-                </div>
-              </Link>
-
-              <Link href={"/admin/students?studentStatus=whiteListed"} className="flex items-center space-x-2  ">
-                <PersonIcon sx={{ fontSize: "35px" }} className=" -mt-1" />
-                <div className="flex flex-col">
-                  <div className="text-xl flex -mb-2 hover:text-2xl transition-all duration-150 ease-in"> Students </div>
-                </div>
-              </Link>
-
-              <div className=" text-lg font-bold w-full justify-center flex" onClick={handleLogout}>
+      <SwipeableDrawer anchor="right" open={open} onClose={handleClose} onOpen={handleOpen}>
+        <div className="w-72 px-6 py-8 bg-white shadow-lg rounded-lg">
+          <div className="flex flex-col space-y-6 items-start w-full">
+            {/** Link Items */}
+            <LinkItem
+              href="/admin/books?booksCategory=all"
+              icon={<Image src={bookIcon} width={30} height={30} alt="Books Icon" />}
+              label="Books"
+            />
+            <LinkItem
+              href="/admin/request?formStatus=Pending"
+              icon={<Image src={requestIcon} width={30} height={30} alt="Request Icon" />}
+              label="Request"
+            />
+            <LinkItem
+              href="/admin/monitor"
+              icon={<Image src={monitoringIcon} width={30} height={30} alt="Monitor Icon" />}
+              label="Monitor"
+            />
+            <LinkItem
+              href="/admin/newBooks?borrowed_status=borrowed"
+              icon={<PriorityHighIcon className="text-primary" fontSize="large" />}
+              label="New Books"
+            />
+            <LinkItem
+              href="/admin/students?studentStatus=whiteListed"
+              icon={<PersonIcon className="text-primary" fontSize="large" />}
+              label="Students"
+            />
+            {/** Logout Button */}
+            <div className="w-full flex justify-center">
+              <Button
+                variant="contained"
+                color="primary"
+                className="!text-white !bg-red-500 hover:!bg-red-600 transition-all"
+                onClick={handleLogout}
+              >
                 Logout
-              </div>
+              </Button>
             </div>
-          </Box>
-        </Fade>
-      </Modal>
+          </div>
+        </div>
+      </SwipeableDrawer>
     </div>
+  )
+}
+const LinkItem = ({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) => {
+  return (
+    <Link href={href} className="flex items-center space-x-4 w-full group">
+      {icon}
+      <span className="text-lg font-medium group-hover:text-primary transition-colors">{label}</span>
+    </Link>
   )
 }
 

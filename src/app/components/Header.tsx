@@ -33,7 +33,7 @@ const Header = ({ page, searchBarToggle }: { page: string; searchBarToggle: bool
   return (
     <div className=" bg-[var(--secondary)] w-full flex lg:justify-between justify-between relative sm:px-16 px-2 py-6 h-[5rem]  lg:rounded-tl-[2rem] ">
       <h1 className="text-3xl font-bold text-white sm:block hidden justify-start">{page}</h1>
-      <MenuPopover open={open} handleClose={handleClose} />
+      <MenuPopover open={open} handleClose={handleClose} handleOpen={handleOpen} />
 
       {searchBarToggle && (
         <div className=" flex  xl:left-[25rem] lg:left-[20rem] lg:max-w-[20rem] left-[15rem] w-full xl:max-w-[30rem] max-w-[15rem]   ">
