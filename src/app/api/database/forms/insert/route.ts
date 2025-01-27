@@ -47,6 +47,38 @@ export async function POST(req: Request) {
     // Insert the form data into the database
     const { student_cnic, name, father_name, mobile, address, books_required, book_return_date } = parsedData.data
 
+    // Check the last form request of the student
+    const lastForm = await db
+      .select()
+      .from(formsTable)
+      .where(eq(formsTable.student_cnic, student_cnic))
+      .orderBy(sql`${formsTable.created_at} DESC`)
+      .limit(1)
+      .execute()
+
+    if (lastForm.length > 0) {
+      const { request_status, borrowed_status } = lastForm[0]
+
+      if (["Pending", "Approved", "Accepted"].includes(request_status)) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "You have already submitted a previous book request.",
+          },
+          { status: 400 }
+        )
+      }
+
+      if (borrowed_status === "borrowed") {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "You currently have a borrowed book. Return it before submitting a new request.",
+          },
+          { status: 400 }
+        )
+      }
+    }
     const bookTitles = books_required.map((book: { book_title: string }) => book.book_title)
 
     const books = await db
