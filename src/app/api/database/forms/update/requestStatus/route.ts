@@ -59,11 +59,7 @@ export async function PUT(req: Request) {
           return_date: formData.book_return_date,
           borrowed_status: borrowed_status,
         }))
-        console.log("bookEntries", bookEntries)
 
-        console.log("studentData.book_history", studentData.book_history)
-
-        console.log("[studentData.book_history, ...bookEntries]", [studentData.book_history, ...bookEntries])
         await tx
           .update(studentsTable)
           .set({
@@ -108,7 +104,7 @@ export async function PUT(req: Request) {
         }
 
         const message = {
-          text: `Your ${formData.form_number} has been rejected`,
+          text: `Your form ${formData.form_number} has been rejected`,
           severity: "urgent" as const,
         }
 

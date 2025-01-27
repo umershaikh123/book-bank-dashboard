@@ -43,9 +43,12 @@ const login = async (credentials: { username: string; password: string }) => {
 export default function LoginPage() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-
+  const [loading, setLoading] = useState(false)
   const mutation = useMutation({
     mutationFn: login,
+    onMutate: () => {
+      setLoading(true)
+    },
     onSuccess: (token: string) => {
       // Store the JWT token securely
       localStorage.setItem("auth_token", token)
@@ -57,6 +60,9 @@ export default function LoginPage() {
     onError: (error: any) => {
       console.log("Login failed", error.message)
       toast.error(error.message || "Login failed")
+    },
+    onSettled: () => {
+      setLoading(false)
     },
   })
 
@@ -122,10 +128,11 @@ export default function LoginPage() {
 
           <button
             type="submit"
+            disabled={loading}
             className=" bg-[var(--secondary)] px-8 py-2 w-80 rounded-lg text-white  hover:bg-[#004D74]  duration-300 ease-in-out transition-colors"
           >
             {" "}
-            Login
+            {loading ? "Loging..." : "Login"}
           </button>
         </form>
       </div>

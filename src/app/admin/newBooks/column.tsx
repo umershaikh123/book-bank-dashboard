@@ -35,9 +35,11 @@ export const columns: ColumnDef<BookRequestType>[] = [
     id: "actions",
     cell: ({ row }) => {
       const [open, setOpen] = useState(false)
+      const [loading, setLoading] = useState(false)
       const { toast } = useToast()
       const handleDelete = async () => {
         try {
+          setLoading(true)
           const response = await fetch("/api/database/requestBooks/delete", {
             method: "DELETE",
             headers: {
@@ -59,6 +61,7 @@ export const columns: ColumnDef<BookRequestType>[] = [
           console.error("Error deleting book request:", err)
           toast({ title: "Error", description: "Something went wrong", variant: "destructive" })
         } finally {
+          setLoading(false)
           setOpen(false)
         }
       }
@@ -81,8 +84,8 @@ export const columns: ColumnDef<BookRequestType>[] = [
                 <Button variant="secondary" onClick={() => setOpen(false)} className="border-2">
                   Cancel
                 </Button>
-                <Button variant="destructive" onClick={handleDelete}>
-                  Delete
+                <Button variant="destructive" onClick={handleDelete} disabled={loading}>
+                  {loading ? "Deleting" : "Delete"}
                 </Button>
               </DialogFooter>
             </DialogContent>

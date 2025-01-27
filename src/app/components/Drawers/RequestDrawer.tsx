@@ -47,6 +47,7 @@ export default function RequestDrawer({
   const [openRejectDialog, setOpenRejectDialog] = useState(false)
   const [openApproveDialog, setOpenApproveDialog] = useState(false)
   const [openAcceptDialog, setOpenAcceptDialog] = useState(false)
+  const [loading, setLoading] = useState(false)
   const { handleReject, handleApprove, handleAccept } = useHandleFormStatus()
 
   const {
@@ -207,10 +208,11 @@ export default function RequestDrawer({
                         Cancel
                       </Button>
                       <Button
+                        disabled={loading}
                         className="bg-green-100 text-green-800 hover:border-green-800 border "
-                        onClick={() => handleAccept(formData.form_number, setOpenAcceptDialog, onClose)}
+                        onClick={() => handleAccept(formData.form_number, setOpenAcceptDialog, onClose, setLoading)}
                       >
-                        Accept
+                        {loading ? "Accepting..." : "Accept"}
                       </Button>
                     </DialogFooter>
                   </DialogContent>
@@ -227,10 +229,11 @@ export default function RequestDrawer({
                         Cancel
                       </Button>
                       <Button
+                        disabled={loading}
                         variant="destructive"
-                        onClick={() => handleReject(formData.form_number, setOpenRejectDialog, onClose)}
+                        onClick={() => handleReject(formData.form_number, setOpenRejectDialog, onClose, setLoading)}
                       >
-                        Reject
+                        {loading ? "Rejecting..." : "Reject"}
                       </Button>
                     </DialogFooter>
                   </DialogContent>
@@ -247,10 +250,11 @@ export default function RequestDrawer({
                         Cancel
                       </Button>
                       <Button
+                        disabled={loading}
                         className="bg-blue-100 text-blue-800 hover:border-blue-800 border "
-                        onClick={() => handleApprove(formData.form_number, setOpenApproveDialog, onClose)}
+                        onClick={() => handleApprove(formData.form_number, setOpenApproveDialog, onClose, setLoading)}
                       >
-                        Approve
+                        {loading ? "Approving..." : "Approve"}
                       </Button>
                     </DialogFooter>
                   </DialogContent>

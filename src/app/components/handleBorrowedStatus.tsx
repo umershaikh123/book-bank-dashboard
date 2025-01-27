@@ -7,7 +7,8 @@ export function useHandleFormStatus() {
   const { toast } = useToast()
   const updateFormMutation = useUpdateBorrowedStatus()
 
-  const handleNotReturned = (form_number: number, setOpenDialog: any, closeDrawer: any) => {
+  const handleNotReturned = (form_number: number, setOpenDialog: any, closeDrawer: any, setLoading: any) => {
+    setLoading(true)
     updateFormMutation.mutate(
       { form_number, borrowed_status: "NotReturned" },
       {
@@ -22,11 +23,15 @@ export function useHandleFormStatus() {
           console.error("Error in changing borrowed status", error)
           toast({ title: "Error", description: "Error in changing borrowed status", variant: "destructive" })
         },
+        onSettled: () => {
+          setLoading(false)
+        },
       }
     )
   }
 
-  const handleReturned = (form_number: number, setOpenDialog: any, closeDrawer: any) => {
+  const handleReturned = (form_number: number, setOpenDialog: any, closeDrawer: any, setLoading: any) => {
+    setLoading(true)
     updateFormMutation.mutate(
       { form_number, borrowed_status: "returned" },
       {
@@ -41,6 +46,9 @@ export function useHandleFormStatus() {
         onError: (error) => {
           console.error("Error in changing borrowed status", error)
           toast({ title: "Error", description: "Error in changing borrowed status", variant: "destructive" })
+        },
+        onSettled: () => {
+          setLoading(false)
         },
       }
     )

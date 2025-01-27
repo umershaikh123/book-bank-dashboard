@@ -38,6 +38,7 @@ const style = {
 const API_URL = "/api/database/books/insert"
 
 export const AddBookPopover = ({ open, handleClose }: { open: boolean; handleClose: any }) => {
+  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     title: "",
     author: "",
@@ -94,6 +95,7 @@ export const AddBookPopover = ({ open, handleClose }: { open: boolean; handleClo
   const mutation = useMutation({
     mutationFn: handleSubmitMutation,
     onMutate: () => {
+      setLoading(true)
       toast.loading("Updating Database...", {
         toastId: "submit-toast",
         icon: "⏳" as any,
@@ -120,7 +122,9 @@ export const AddBookPopover = ({ open, handleClose }: { open: boolean; handleClo
         isLoading: false,
       })
     },
-    onSettled: () => {},
+    onSettled: () => {
+      setLoading(false)
+    },
   })
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value, files } = e.target
@@ -248,9 +252,10 @@ export const AddBookPopover = ({ open, handleClose }: { open: boolean; handleClo
               <div className="mt-6 flex items-center justify-center">
                 <button
                   type="submit"
+                  disabled={loading}
                   className="bg-[var(--secondary)] px-8 py-2 w-80 rounded-lg text-white hover:bg-[#004D74] duration-300 ease-in-out transition-colors"
                 >
-                  Submit
+                  {loading ? "Submitting..." : "Submit"}
                 </button>
               </div>
             </form>
@@ -271,6 +276,7 @@ export const DeleteBookPopover = ({
   bookTitle: string
 }) => {
   const router = useRouter()
+  const [loading, setLoading] = useState(false)
   const mutation = useMutation({
     mutationFn: async () => {
       const response = await fetch("/api/database/books/delete", {
@@ -288,7 +294,9 @@ export const DeleteBookPopover = ({
       }
       return response.json()
     },
-
+    onMutate: () => {
+      setLoading(true)
+    },
     onSuccess: () => {
       toast.success("Book deleted successfully!")
       queryClient.invalidateQueries({ queryKey: ["books"] })
@@ -298,6 +306,9 @@ export const DeleteBookPopover = ({
     onError: (error: any) => {
       console.error("Failed to delete book:", error)
       toast.error("Failed to delete the book.")
+    },
+    onSettled: () => {
+      setLoading(false)
     },
   })
 
@@ -357,9 +368,10 @@ export const DeleteBookPopover = ({
                 </button>
                 <button
                   onClick={handleDelete}
+                  disabled={loading}
                   className="bg-[#FF2F2F] hover:bg-white hover:text-[#FF2F2F] border-2 transition-all duration-300 ease-in-out border-[#FF2F2F] px-6 py-2 flex items-center w-32 justify-center rounded-lg"
                 >
-                  Delete
+                  {loading ? "Deleting..." : "Delete"}
                 </button>
               </div>
             </div>
@@ -472,6 +484,7 @@ export const UpdateBookPopover = ({ open, handleClose, booksData }: { open: bool
     price: booksData.price,
     image: null,
   })
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
   const handleSubmitMutation = async (formData: {
     image: File | null
@@ -519,6 +532,7 @@ export const UpdateBookPopover = ({ open, handleClose, booksData }: { open: bool
   const mutation = useMutation({
     mutationFn: handleSubmitMutation,
     onMutate: () => {
+      setLoading(true)
       toast.loading("Updating Database...", {
         toastId: "submit-toast",
         icon: "⏳" as any,
@@ -546,7 +560,9 @@ export const UpdateBookPopover = ({ open, handleClose, booksData }: { open: bool
         isLoading: false,
       })
     },
-    onSettled: () => {},
+    onSettled: () => {
+      setLoading(false)
+    },
   })
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value, files } = e.target
@@ -690,9 +706,10 @@ export const UpdateBookPopover = ({ open, handleClose, booksData }: { open: bool
               <div className="mt-6 flex items-center justify-center">
                 <button
                   type="submit"
+                  disabled={loading}
                   className="bg-[var(--secondary)] px-8 py-2 w-80 rounded-lg text-white hover:bg-[#004D74] duration-300 ease-in-out transition-colors"
                 >
-                  Submit
+                  {loading ? "Submitting..." : "Submit"}
                 </button>
               </div>
             </form>

@@ -7,9 +7,11 @@ export function useHandleFormStatus() {
   const { toast } = useToast()
   const updateFormMutation = useUpdateFormStatus()
 
-  const handleReject = (form_number: number, setOpenDialog: any, closeDrawer: any) => {
+  const handleReject = (form_number: number, setOpenDialog: any, closeDrawer: any, setLoading: any) => {
+    setLoading(true)
     updateFormMutation.mutate(
       { form_number, request_status: "Rejected" },
+
       {
         onSuccess: (data) => {
           console.log("Form rejected successfully:", data)
@@ -22,11 +24,15 @@ export function useHandleFormStatus() {
           console.error("Error rejecting form:", error)
           toast({ title: "Error", description: "Failed to Reject request", variant: "destructive" })
         },
+        onSettled: () => {
+          setLoading(false)
+        },
       }
     )
   }
 
-  const handleApprove = (form_number: number, setOpenDialog: any, closeDrawer: any) => {
+  const handleApprove = (form_number: number, setOpenDialog: any, closeDrawer: any, setLoading: any) => {
+    setLoading(true)
     updateFormMutation.mutate(
       { form_number, request_status: "Approved" },
       {
@@ -41,11 +47,15 @@ export function useHandleFormStatus() {
           console.error("Error approving form:", error)
           toast({ title: "Error", description: "Failed to Approve request", variant: "destructive" })
         },
+        onSettled: () => {
+          setLoading(false)
+        },
       }
     )
   }
 
-  const handleAccept = (form_number: number, setOpenDialog: any, closeDrawer: any) => {
+  const handleAccept = (form_number: number, setOpenDialog: any, closeDrawer: any, setLoading: any) => {
+    setLoading(true)
     updateFormMutation.mutate(
       { form_number, request_status: "Accepted" },
       {
@@ -59,6 +69,9 @@ export function useHandleFormStatus() {
         onError: (error) => {
           console.error("Error accepting form:", error)
           toast({ title: "Error", description: "Failed to Accept request", variant: "destructive" })
+        },
+        onSettled: () => {
+          setLoading(false)
         },
       }
     )
