@@ -62,7 +62,7 @@ export function RequestMonitorDrawer({
   })
 
   const [openNotReturnedDialog, setOpenNotReturnedDialog] = useState(false)
-
+  const [loading, setLoading] = useState(false)
   const [openReturnedDialog, setOpenReturnedDialog] = useState(false)
   const { handleNotReturned, handleReturned } = useHandleFormStatus()
 
@@ -194,7 +194,7 @@ export function RequestMonitorDrawer({
                       </Button>
                       <Button
                         className="bg-green-100 text-green-800 hover:border-green-800 border "
-                        onClick={() => handleReturned(formData.form_number, setOpenReturnedDialog, onClose)}
+                        onClick={() => handleReturned(formData.form_number, setOpenReturnedDialog, onClose, setLoading)}
                       >
                         Return
                       </Button>
@@ -214,7 +214,7 @@ export function RequestMonitorDrawer({
                       </Button>
                       <Button
                         variant="destructive"
-                        onClick={() => handleNotReturned(formData.form_number, setOpenNotReturnedDialog, onClose)}
+                        onClick={() => handleNotReturned(formData.form_number, setOpenNotReturnedDialog, onClose, setLoading)}
                       >
                         Not Return
                       </Button>
