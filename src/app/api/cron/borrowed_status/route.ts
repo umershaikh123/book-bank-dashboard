@@ -34,6 +34,8 @@ export async function GET() {
             email: studentsTable.email,
             book_history: studentsTable.book_history,
             totalBooksNotReturned: studentsTable.totalBooksNotReturned,
+            fcmToken: studentsTable.fcmToken,
+            name: studentsTable.name,
           })
           .from(studentsTable)
           .where(eq(studentsTable.student_cnic, student_cnic))
@@ -65,6 +67,45 @@ export async function GET() {
           })
           .where(eq(studentsTable.student_cnic, student_cnic))
           .execute()
+
+        if (studentData.fcmToken) {
+          try {
+            const returnBooksMessage = {
+              to: studentData.fcmToken,
+              notification: {
+                title: "⏰ Time to Return Your Books!",
+                body: `Hi ${studentData.name}, the return date for your form #${form_number} has passed. Please return the books as soon as possible! 📚🔄`,
+              },
+              data: {
+                customKey1: "value1",
+                customKey2: "value2",
+                form_number: form_number,
+                student_name: studentData.name,
+                status: "Return Reminder",
+                severity: "normal",
+                timestamp: new Date().toISOString(),
+              },
+            }
+
+            const response = await fetch("https://fcm.googleapis.com/fcm/send", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `key=${process.env.FCM_SERVER_KEY}`,
+              },
+              body: JSON.stringify(returnBooksMessage),
+            })
+
+            const responseData = await response.json()
+            if (!response.ok) {
+              throw new Error(`Failed to send notification: ${responseData.error}`)
+            }
+
+            console.log("Notification sent successfully:", responseData)
+          } catch (error) {
+            console.error("Error sending notification:", error)
+          }
+        }
 
         const message = {
           text: `Please return your books. The return date has passed for form number ${form_number}.`,

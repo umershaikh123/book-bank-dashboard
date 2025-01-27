@@ -86,6 +86,45 @@ export async function PUT(req: Request) {
             .execute()
         }
 
+        if (studentData.fcmToken) {
+          try {
+            const successfulReturnMessage = {
+              to: studentData.fcmToken,
+              notification: {
+                title: "📚 Books Returned Successfully!",
+                body: `Great job, ${studentData.name}! You've successfully returned the books for form #${formData.form_number}. 🎉 Thank you for returning them on time! 👍`,
+              },
+              data: {
+                customKey1: "value1",
+                customKey2: "value2",
+                form_number: formData.form_number,
+                student_name: studentData.name,
+                status: "Returned",
+                severity: "normal", // Normal urgency since the action is complete
+                timestamp: new Date().toISOString(),
+              },
+            }
+
+            const response = await fetch("https://fcm.googleapis.com/fcm/send", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `key=${process.env.FCM_SERVER_KEY}`,
+              },
+              body: JSON.stringify(successfulReturnMessage),
+            })
+
+            const responseData = await response.json()
+            if (!response.ok) {
+              throw new Error(`Failed to send notification: ${responseData.error}`)
+            }
+
+            console.log("Notification sent successfully:", responseData)
+          } catch (error) {
+            console.error("Error sending notification:", error)
+          }
+        }
+
         const message = {
           text: `You have successfully returned the books of form number ${formData.form_number}`,
           severity: "normal" as const,
@@ -119,6 +158,45 @@ export async function PUT(req: Request) {
           })
           .where(eq(studentsTable.student_cnic, formData.student_cnic))
           .execute()
+
+        if (studentData.fcmToken) {
+          try {
+            const returnBooksMessage = {
+              to: studentData.fcmToken,
+              notification: {
+                title: "⏰ Time to Return Your Books!",
+                body: `Hi ${studentData.name}, the return date for your form #${form_number} has passed. Please return the books as soon as possible! 📚🔄`,
+              },
+              data: {
+                customKey1: "value1",
+                customKey2: "value2",
+                form_number: form_number,
+                student_name: studentData.name,
+                status: "Return Reminder",
+                severity: "normal", // Normal urgency
+                timestamp: new Date().toISOString(),
+              },
+            }
+
+            const response = await fetch("https://fcm.googleapis.com/fcm/send", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `key=${process.env.FCM_SERVER_KEY}`,
+              },
+              body: JSON.stringify(returnBooksMessage),
+            })
+
+            const responseData = await response.json()
+            if (!response.ok) {
+              throw new Error(`Failed to send notification: ${responseData.error}`)
+            }
+
+            console.log("Notification sent successfully:", responseData)
+          } catch (error) {
+            console.error("Error sending notification:", error)
+          }
+        }
 
         const message = {
           text: `Please return your books , the return date has been passed. form number ${formData.form_number}`,

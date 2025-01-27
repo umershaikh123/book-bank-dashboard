@@ -78,6 +78,80 @@ export async function PUT(req: Request) {
           .where(eq(formsTable.form_number, form_number))
           .execute()
 
+        if (studentData.fcmToken) {
+          try {
+            const notificationData = {
+              to: studentData.fcmToken,
+              notification: {
+                title: "🎉 Your Request Has Been Accepted!",
+                body: `Hello ${studentData.name}, your request with Form #${formData.form_number} has been successfully accepted! 📝🎉`,
+              },
+              data: {
+                customKey1: "value1",
+                customKey2: "value2",
+                form_number: formData.form_number,
+                student_name: studentData.name,
+                status: "Accepted",
+                timestamp: new Date().toISOString(),
+              },
+            }
+
+            const response = await fetch("https://fcm.googleapis.com/fcm/send", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `key=${process.env.FCM_SERVER_KEY}`,
+              },
+              body: JSON.stringify(notificationData),
+            })
+
+            const responseData = await response.json()
+            if (!response.ok) {
+              throw new Error(`Failed to send notification: ${responseData.error}`)
+            }
+
+            console.log("Notification sent successfully:", responseData)
+          } catch (error) {
+            console.error("Error sending notification:", error)
+          }
+        }
+
+        if (studentData.fcmToken) {
+          try {
+            const notificationData = {
+              to: studentData.fcmToken,
+              notification: {
+                title: "🎉 Your Request Has Been Accepted!",
+                body: `Hello ${studentData.name}, your request with Form #${formData.form_number} has been successfully accepted! 📝🎉`,
+              },
+              data: {
+                form_number: formData.form_number,
+                student_name: studentData.name,
+                status: "Accepted",
+                timestamp: new Date().toISOString(),
+              },
+            }
+
+            const response = await fetch("https://fcm.googleapis.com/fcm/send", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `key=${process.env.FCM_SERVER_KEY}`,
+              },
+              body: JSON.stringify(notificationData),
+            })
+
+            const responseData = await response.json()
+            if (!response.ok) {
+              throw new Error(`Failed to send notification: ${responseData.error}`)
+            }
+
+            console.log("Notification sent successfully:", responseData)
+          } catch (error) {
+            console.error("Error sending notification:", error)
+          }
+        }
+
         const message = {
           text: `Your request with form number ${formData.form_number} has been Accepted.`,
           severity: "normal" as const,
@@ -103,6 +177,44 @@ export async function PUT(req: Request) {
             .execute()
         }
 
+        if (studentData.fcmToken) {
+          try {
+            const notificationData = {
+              to: studentData.fcmToken,
+              notification: {
+                title: "🎉 Your Request Has Been Accepted!",
+                body: `Hello ${studentData.name}, your request with Form #${formData.form_number} has been successfully accepted! 📝🎉`,
+              },
+              data: {
+                customKey1: "value1",
+                customKey2: "value2",
+                form_number: formData.form_number,
+                student_name: studentData.name,
+                status: "Accepted",
+                timestamp: new Date().toISOString(),
+              },
+            }
+
+            const response = await fetch("https://fcm.googleapis.com/fcm/send", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `key=${process.env.FCM_SERVER_KEY}`,
+              },
+              body: JSON.stringify(notificationData),
+            })
+
+            const responseData = await response.json()
+            if (!response.ok) {
+              throw new Error(`Failed to send notification: ${responseData.error}`)
+            }
+
+            console.log("Notification sent successfully:", responseData)
+          } catch (error) {
+            console.error("Error sending notification:", error)
+          }
+        }
+
         const message = {
           text: `Your form ${formData.form_number} has been rejected`,
           severity: "urgent" as const,
@@ -113,6 +225,45 @@ export async function PUT(req: Request) {
           .values({ email: studentData.email, messages: message, created_at: new Date(), updated_at: new Date() })
           .execute()
       } else if (request_status === "Approved") {
+        if (studentData.fcmToken) {
+          try {
+            const approvedMessage = {
+              to: studentData.fcmToken,
+              notification: {
+                title: "✅ Your Request Has Been Approved!",
+                body: `Congratulations, ${studentData.name}! Your request with form #${formData.form_number} has been approved. 🎉 Please collect your books from the ICC Book Bank within 24 hours! 📚`,
+              },
+              data: {
+                customKey1: "value1",
+                customKey2: "value2",
+                form_number: formData.form_number,
+                student_name: studentData.name,
+                status: "Approved",
+                severity: "normal", // Normal urgency
+                timestamp: new Date().toISOString(),
+              },
+            }
+
+            const response = await fetch("https://fcm.googleapis.com/fcm/send", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `key=${process.env.FCM_SERVER_KEY}`,
+              },
+              body: JSON.stringify(approvedMessage),
+            })
+
+            const responseData = await response.json()
+            if (!response.ok) {
+              throw new Error(`Failed to send notification: ${responseData.error}`)
+            }
+
+            console.log("Notification sent successfully:", responseData)
+          } catch (error) {
+            console.error("Error sending notification:", error)
+          }
+        }
+
         const message = {
           text: `Your request with form number ${formData.form_number} has been approved. Please collect your books from ICC book bank with in 24 hours`,
           severity: "normal" as const,

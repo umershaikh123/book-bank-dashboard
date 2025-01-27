@@ -1,5 +1,5 @@
 import { pgTable, text, integer, serial, jsonb, timestamp, date } from "drizzle-orm/pg-core"
-import { InferModel } from "drizzle-orm"
+
 // Define the books table
 export const booksTable = pgTable("books", {
   title: text("title").primaryKey(),
@@ -42,6 +42,7 @@ export const studentsTable = pgTable("students", {
   created_at: timestamp("created_at").defaultNow(),
   updated_at: timestamp("updated_at").defaultNow(),
   password: text("password").notNull(),
+  fcmToken: text("fcmToken"),
 })
 
 export const bookRequestsTable = pgTable("book_requests", {
