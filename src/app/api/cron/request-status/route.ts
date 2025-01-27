@@ -18,6 +18,8 @@ export async function GET() {
         form_number: formsTable.form_number,
         student_cnic: formsTable.student_cnic,
         student_email: studentsTable.email, // Fetch email via join
+        student_fcm: studentsTable.fcmToken,
+        student_name: studentsTable.name,
       })
       .from(formsTable)
       .leftJoin(studentsTable, eq(formsTable.student_cnic, studentsTable.student_cnic)) // Join with studentsTable
@@ -30,7 +32,7 @@ export async function GET() {
 
     await db.transaction(async (tx) => {
       for (const form of formsToReject) {
-        const { books_required, form_number, student_email } = form
+        const { books_required, form_number, student_email, student_fcm, student_name } = form
 
         // Update request_status to "Rejected"
         await tx.update(formsTable).set({ request_status: "Rejected" }).where(eq(formsTable.form_number, form.form_id)).execute()
@@ -45,6 +47,45 @@ export async function GET() {
             .set({ availableCopies: sql`${booksTable.availableCopies} + 1` })
             .where(eq(booksTable.title, book_title))
             .execute()
+        }
+
+        if (student_fcm) {
+          try {
+            const failedCollectionMessage = {
+              to: student_fcm,
+              notification: {
+                title: "❗ Form Rejected Due to Non-Collection!",
+                body: `Oh no, ${student_name}! You failed to collect your books within 24 hours, so your form #${form_number} has been rejected. 😞 Please try again next time.`,
+              },
+              data: {
+                customKey1: "value1",
+                customKey2: "value2",
+                form_number: form_number,
+                student_name: student_name,
+                status: "Rejected",
+                severity: "urgent",
+                timestamp: new Date().toISOString(),
+              },
+            }
+
+            const response = await fetch("https://fcm.googleapis.com/fcm/send", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `key=${process.env.FCM_SERVER_KEY}`,
+              },
+              body: JSON.stringify(failedCollectionMessage),
+            })
+
+            const responseData = await response.json()
+            if (!response.ok) {
+              throw new Error(`Failed to send notification: ${responseData.error}`)
+            }
+
+            console.log("Notification sent successfully:", responseData)
+          } catch (error) {
+            console.error("Error sending notification:", error)
+          }
         }
 
         // Insert notification for the student

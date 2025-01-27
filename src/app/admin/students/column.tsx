@@ -22,6 +22,7 @@ export type StudentType = {
   totalBooksBorrowed: number
   totalBooksReturned: number
   totalBooksNotReturned: number
+  fcmToken?: string
 }
 
 export const columns: ColumnDef<StudentType>[] = [
