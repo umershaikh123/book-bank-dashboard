@@ -47,40 +47,55 @@ export async function POST(req: Request) {
     // Insert the form data into the database
     const { student_cnic, name, father_name, mobile, address, books_required, book_return_date } = parsedData.data
 
-    // Check the last form request of the student
-    const lastForm = await db
-      .select()
+    // Get all the books titles from the current request
+    const requestedBookTitles = Array.isArray(books_required) ? books_required.map((book: any) => book.title) : []
+
+    if (requestedBookTitles.length === 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "No books selected for request",
+        },
+        { status: 400 }
+      )
+    }
+
+    // Get all previous forms submitted by this user
+    const previousForms = await db
+      .select({
+        books_required: formsTable.books_required,
+      })
       .from(formsTable)
       .where(eq(formsTable.student_cnic, student_cnic))
-      .orderBy(sql`${formsTable.created_at} DESC`)
-      .limit(1)
       .execute()
 
-    if (lastForm.length > 0) {
-      const { request_status, borrowed_status } = lastForm[0]
+    // Extract all previously requested book titles
+    const previouslyRequestedBooks = new Set<string>()
 
-      if (["Pending", "Approved", "Accepted"].includes(request_status)) {
-        if (borrowed_status === "borrowed") {
-          return NextResponse.json(
-            {
-              success: false,
-              error: "You currently have borrowed a set of books. Return it before submitting a new request.",
-            },
-            { status: 400 }
-          )
-        }
-
-        if (borrowed_status === "not_yet") {
-          return NextResponse.json(
-            {
-              success: false,
-              error: "You have already submitted a previous book request.",
-            },
-            { status: 400 }
-          )
-        }
+    previousForms.forEach((form) => {
+      const booksInForm = form.books_required as any[]
+      if (Array.isArray(booksInForm)) {
+        booksInForm.forEach((book) => {
+          if (book && typeof book === "object" && book.title) {
+            previouslyRequestedBooks.add(book.title)
+          }
+        })
       }
+    })
+
+    // Check if any of the currently requested books were previously requested
+    const duplicateBooks = requestedBookTitles.filter((title) => previouslyRequestedBooks.has(title))
+
+    if (duplicateBooks.length > 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `You have already requested the following books: ${duplicateBooks.join(", ")}. Please select different books.`,
+        },
+        { status: 400 }
+      )
     }
+
     const bookTitles = books_required.map((book: { book_title: string }) => book.book_title)
 
     const books = await db

@@ -6,7 +6,7 @@ import { FormData } from "@/app/admin/monitor/page"
 import { useQuery } from "@tanstack/react-query"
 import { BookType } from "@/app/lib/Books/fetcher"
 import Lottie from "lottie-react"
-
+import Image from "next/image"
 // @ts-ignore
 import notFoundAnimation from "/public/animations/notFound.json"
 import { Button } from "@/components/ui/button"
@@ -146,7 +146,7 @@ export function RequestMonitorDrawer({
                     key={index}
                     className="flex items-center gap-4 p-4 border rounded-lg shadow-sm hover:shadow-md transition-all duration-300 ease-in-out"
                   >
-                    <img
+                    <Image
                       src={book.image}
                       alt={book.title}
                       width={70}
