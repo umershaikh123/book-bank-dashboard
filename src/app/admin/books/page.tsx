@@ -287,7 +287,7 @@ const BookImage = ({ book, booksCategory }: { book: BookType; booksCategory: str
 }
 
 // Virtualized grid that only renders what's needed
-export const OptimizedBookGrid = ({
+const OptimizedBookGrid = ({
   books,
   isLoading,
   booksCategory,
