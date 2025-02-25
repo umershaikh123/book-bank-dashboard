@@ -199,7 +199,7 @@ const getProxiedImageUrl = (originalUrl: string): string => {
 }
 
 // Image component with error handling and fallback
-export const BookImage = ({
+const BookImage = ({
   book,
   booksCategory,
   priority = false,
