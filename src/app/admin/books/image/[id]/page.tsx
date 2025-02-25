@@ -24,7 +24,6 @@ const ImagePage = ({ params }: { params: { id: string } }) => {
     image: searchParams.get("image") || "/Images/booksData/image1.svg",
   }
 
- 
   const [openDelete, setOpenDelete] = useState(false)
   const handleOpenDelete = () => setOpenDelete(true)
   const handleCloseDelete = () => setOpenDelete(false)
@@ -64,7 +63,7 @@ const ImagePage = ({ params }: { params: { id: string } }) => {
             </button>
             <div className="flex items-center justify-center w-full h-[70vh]">
               <div className="flex justify-evenly  bg-white rounded-3xl shadow-md shadow-black w-fit h-[25rem] px-10 py-6">
-                <img
+                <Image
                   src={bookDetails.image}
                   alt={bookDetails.title as string}
                   width={250}

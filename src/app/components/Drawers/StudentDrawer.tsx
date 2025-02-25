@@ -5,7 +5,7 @@ import Lottie from "lottie-react"
 import notFoundAnimation from "/public/animations/notFound.json"
 import { StudentType } from "@/app/admin/students/column"
 import { fetchBooks } from "./fetchBooks"
-
+import Image from "next/image"
 export function StudentDrawer({
   open,
   onClose,
@@ -127,7 +127,7 @@ export function StudentDrawer({
                     key={index}
                     className="flex items-center gap-4 p-4 border rounded-lg shadow-sm hover:shadow-md transition-all"
                   >
-                    <img src={book.image} alt={book.title} width={70} height={70} className="rounded object-cover" />
+                    <Image src={book.image} alt={book.title} width={70} height={70} className="rounded object-cover" />
                     <div className="flex-1">
                       <h4 className="font-bold text-gray-800">{book.title}</h4>
                       <p className="text-sm text-gray-600">Author: {book.author}</p>

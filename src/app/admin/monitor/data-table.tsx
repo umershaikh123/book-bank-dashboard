@@ -114,7 +114,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             <TableRow>
               <TableCell colSpan={columns.length} className="text-center">
                 <div className="justify-center items-center h-fit w-full flex flex-col">
-                  <Lottie style={{ height: 200, width: 200 }} animationData={notFoundAnimation} loop={true} />
+                  <Lottie style={{ height: 300, width: 300 }} animationData={notFoundAnimation} loop={true} />
 
                   <h1 className="text-xl font-bold text-gray-300">Data not Found</h1>
                 </div>

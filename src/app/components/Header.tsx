@@ -5,6 +5,7 @@ import Link from "next/link"
 import { BookType } from "../lib/Books/fetcher"
 import MenuIcon from "@mui/icons-material/Menu"
 import { MenuPopover } from "./Popover"
+import Image from "next/image"
 const Header = ({ page, searchBarToggle }: { page: string; searchBarToggle: boolean }) => {
   const [searchResults, setSearchResults] = useState([])
   const [open, setOpen] = React.useState(false)
@@ -69,7 +70,7 @@ const Header = ({ page, searchBarToggle }: { page: string; searchBarToggle: bool
                 className="block p-4 bg-white shadow-md rounded-lg transition hover:shadow-lg hover:scale-105 duration-200 ease-in-out"
               >
                 <div className="flex items-start">
-                  <img
+                  <Image
                     src={book.image}
                     alt={book.title as string}
                     className="w-[120px] h-[120px] object-cover rounded-md shadow-sm"

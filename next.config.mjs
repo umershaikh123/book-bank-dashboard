@@ -4,6 +4,17 @@ const nextConfig = {
   experimental: {
     missingSuspenseWithCSRBailout: false,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "gateway.pinata.cloud",
+        port: "",
+        pathname: "/ipfs/**",
+        search: "",
+      },
+    ],
+  },
   async headers() {
     return [
       {

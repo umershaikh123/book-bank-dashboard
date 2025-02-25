@@ -29,12 +29,12 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
-  height: "95vh",
+  height: "fit",
   bgcolor: "background.paper",
   boxShadow: 24,
   borderRadius: "24px",
   px: 4,
-  py: 2,
+  py: 4,
 }
 
 const API_URL = "/api/database/books/insert"
@@ -145,7 +145,7 @@ export const AddBookPopover = ({ open, handleClose }: { open: boolean; handleClo
       title: formData.get("title") as string,
       category: formData.get("category") as string,
       totalCopies: formData.get("totalCopies") as string,
-      availableCopies: formData.get("availableCopies") as string,
+      availableCopies: formData.get("totalCopies") as string,
       price: formData.get("price") as string,
     }
     mutation.mutate(parsedData)
@@ -222,7 +222,7 @@ export const AddBookPopover = ({ open, handleClose }: { open: boolean; handleClo
                 />
               </div>
 
-              <div className="mt-2">
+              {/* <div className="mt-2">
                 <Label htmlFor="availableCopies">Available Copies</Label>
                 <Input
                   type="number"
@@ -232,7 +232,7 @@ export const AddBookPopover = ({ open, handleClose }: { open: boolean; handleClo
                   onChange={handleChange}
                   placeholder="Enter Available Copies..."
                 />
-              </div>
+              </div> */}
 
               <div className="mt-2">
                 <Label htmlFor="price">Price</Label>
@@ -594,12 +594,12 @@ export const UpdateBookPopover = ({ open, handleClose, booksData }: { open: bool
 
               transform: "translate(-50%, -50%)",
               width: 400,
-              height: "95vh",
+              height: "fit",
               bgcolor: "background.paper",
               boxShadow: 24,
               borderRadius: "24px",
               px: 4,
-              py: 2,
+              py: 4,
             }}
             className=" lg:left-[60%] left-[50%]"
           >

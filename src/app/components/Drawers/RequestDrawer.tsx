@@ -12,7 +12,7 @@ import notFoundAnimation from "/public/animations/notFound.json"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { useState } from "react"
 import { useHandleFormStatus } from "../handleFormStatus"
-
+import Image from "next/image"
 const fetchBooks = async (booksRequired: { book_title: string }[] | undefined) => {
   if (!booksRequired || booksRequired.length === 0) return []
   const token = localStorage.getItem("auth_token")
@@ -146,7 +146,7 @@ export default function RequestDrawer({
                     key={index}
                     className="flex items-center gap-4 p-4 border rounded-lg shadow-sm hover:shadow-md transition-all duration-300 ease-in-out"
                   >
-                    <img
+                    <Image
                       src={book.image}
                       alt={book.title}
                       width={70}
