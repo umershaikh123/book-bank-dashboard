@@ -50,8 +50,8 @@ const Header = ({ page, searchBarToggle }: { page: string; searchBarToggle: bool
 
       {/* Render search results */}
       {searchBarToggle && searchResults.length > 0 && (
-        <div className=" max-h-[87vh] overflow-y-auto absolute shadow-xl border hover:bg-slate-200 duration-300 transition-all ease-in-out border-[#ABABAB] top-[4.1rem] xl:left-[25rem] lg:left-[20rem]   sm:left-[15rem] left-[0rem] bg-white   rounded-md p-4 w-full   max-w-[30rem]">
-          <ul className="grid grid-cols-1 gap-2   mt-4">
+        <div className=" z-[100] max-h-[87vh] overflow-y-auto absolute shadow-xl border hover:bg-slate-200 duration-300 transition-all ease-in-out border-[#ABABAB] top-[4.1rem] xl:left-[25rem] lg:left-[20rem]   sm:left-[15rem] left-[0rem] bg-white   rounded-md p-4 w-full   max-w-[30rem]">
+          <ul className=" z-[100]  grid grid-cols-1 gap-2   mt-4">
             {searchResults.map((book: BookType, index) => (
               <Link
                 href={{
@@ -73,7 +73,9 @@ const Header = ({ page, searchBarToggle }: { page: string; searchBarToggle: bool
                   <Image
                     src={book.image}
                     alt={book.title as string}
-                    className="w-[120px] h-[120px] object-cover rounded-md shadow-sm"
+                    width={120}
+                    height={120}
+                    className="object-cover rounded-md shadow-sm"
                   />
                   <div className="ml-4 flex flex-col">
                     <h1 className="text-lg font-bold text-gray-800">{book.title}</h1>

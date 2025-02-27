@@ -68,23 +68,39 @@ export async function POST(req: Request) {
       .from(formsTable)
       .where(eq(formsTable.student_cnic, student_cnic))
       .execute()
+    console.log("previousForms[0]", previousForms[0])
+    console.log("previousForms[0].books_required", previousForms[0].books_required)
 
     // Extract all previously requested book titles
     const previouslyRequestedBooks = new Set<string>()
+    console.log("previouslyRequestedBooks", previouslyRequestedBooks)
 
     previousForms.forEach((form) => {
+      console.log("form  ", form)
+      console.log("form  ", form)
+
       const booksInForm = form.books_required as any[]
+      console.log("booksInForm ", booksInForm)
+
       if (Array.isArray(booksInForm)) {
         booksInForm.forEach((book) => {
-          if (book && typeof book === "object" && book.title) {
+          console.log(" book.title", book && book.book_title)
+
+          if (book && book.book_title) {
+            console.log("adding")
+
             previouslyRequestedBooks.add(book.title)
           }
         })
       }
     })
 
+    console.log("previousForms", previousForms)
+
     // Check if any of the currently requested books were previously requested
     const duplicateBooks = requestedBookTitles.filter((title) => previouslyRequestedBooks.has(title))
+    console.log("requestedBookTitles", requestedBookTitles)
+    console.log("duplicateBooks", duplicateBooks)
 
     if (duplicateBooks.length > 0) {
       return NextResponse.json(
@@ -97,7 +113,7 @@ export async function POST(req: Request) {
     }
 
     const bookTitles = books_required.map((book: { book_title: string }) => book.book_title)
-
+    console.log("bookTitles", bookTitles)
     const books = await db
       .select({ title: booksTable.title, availableCopies: booksTable.availableCopies })
       .from(booksTable)
