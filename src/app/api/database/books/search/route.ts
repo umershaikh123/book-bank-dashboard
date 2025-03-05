@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { like, or } from "drizzle-orm"
+import { sql, like, or } from "drizzle-orm"
 import { z } from "zod"
 import { drizzle } from "drizzle-orm/neon-serverless"
 
@@ -28,12 +28,16 @@ export async function GET(req: Request) {
 
     const searchQuery = `%${parsedQuery.data.query}%`
 
-    // Perform the database search with OR conditions for title, author, category,
+    // Perform the database search with case-insensitive comparisons
     const books = await db
       .select()
       .from(booksTable)
       .where(
-        or(like(booksTable.title, searchQuery), like(booksTable.author, searchQuery), like(booksTable.category, searchQuery))
+        or(
+          sql`LOWER(${booksTable.title}) LIKE LOWER(${searchQuery})`,
+          sql`LOWER(${booksTable.author}) LIKE LOWER(${searchQuery})`,
+          sql`LOWER(${booksTable.category}) LIKE LOWER(${searchQuery})`
+        )
       )
       .execute()
 
