@@ -104,16 +104,16 @@ export default function Page() {
 function ButtonRow({ handleOpen, booksCategory }: { handleOpen: any; booksCategory: string }) {
   return (
     <div className="mt-6 lg:px-16 px-4 flex  lg:flex-nowrap flex-wrap items-center justify-between">
-      <div className=" space-x-2  flex    w-full   items-center">
+      <div className="space-x-2 flex w-full items-center">
         {["all", "school", "intermediate", "business"].map((category) => (
-          <div className=" flex   items-start  ">
-            <Link key={category} href={{ query: { booksCategory: category } }}>
+          <div key={category} className="flex items-start">
+            <Link href={{ query: { booksCategory: category.toLowerCase() } }}>
               <button
                 className={`${
-                  booksCategory === category
+                  booksCategory?.toLowerCase() === category.toLowerCase()
                     ? "text-[var(--secondary)] border-[var(--secondary)]"
                     : "text-[var(--gary)] border-[var(--gary)]"
-                } px-4  text-sm py-[0.3rem] rounded-lg font-semibold border-2 transition-all duration-300 ease-in-out`}
+                } px-4 text-sm py-[0.3rem] rounded-lg font-semibold border-2 transition-all duration-300 ease-in-out`}
               >
                 {category.charAt(0).toUpperCase() + category.slice(1)}
               </button>
@@ -121,7 +121,6 @@ function ButtonRow({ handleOpen, booksCategory }: { handleOpen: any; booksCatego
           </div>
         ))}
       </div>
-
       <div className="w-full justify-end flex lg:mt-0 mt-4">
         <button
           onClick={handleOpen}

@@ -23,6 +23,8 @@ import PriorityHighIcon from "@mui/icons-material/PriorityHigh"
 import PersonIcon from "@mui/icons-material/Person"
 import SwipeableDrawer from "@mui/material/SwipeableDrawer"
 import Button from "@mui/material/Button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -136,20 +138,51 @@ export const AddBookPopover = ({ open, handleClose }: { open: boolean; handleClo
     }))
   }
 
+  // const handleCategoryChange = (value: string) => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     category: value,
+  //   }))
+  // }
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault()
+  //   const formData = new FormData(e.target as HTMLFormElement)
+  //   const parsedData = {
+  //     image: formData.get("image") as File | null,
+  //     author: formData.get("author") as string,
+  //     title: formData.get("title") as string,
+  //     category: formData.get("category") as string,
+  //     totalCopies: formData.get("totalCopies") as string,
+  //     availableCopies: formData.get("totalCopies") as string,
+  //     price: formData.get("price") as string,
+  //   }
+  //   mutation.mutate(parsedData)
+  // }
+
+  const handleCategoryChange = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      category: value,
+    }))
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const formData = new FormData(e.target as HTMLFormElement)
+    const form = e.target as HTMLFormElement
+    const formDataObj = new FormData(form)
+
     const parsedData = {
-      image: formData.get("image") as File | null,
-      author: formData.get("author") as string,
-      title: formData.get("title") as string,
-      category: formData.get("category") as string,
-      totalCopies: formData.get("totalCopies") as string,
-      availableCopies: formData.get("totalCopies") as string,
-      price: formData.get("price") as string,
+      image: formDataObj.get("image") as File | null,
+      author: formDataObj.get("author") as string,
+      title: formDataObj.get("title") as string,
+      category: formData.category, // Use state value since select isn't part of the form
+      totalCopies: formDataObj.get("totalCopies") as string,
+      availableCopies: formDataObj.get("totalCopies") as string, // Using totalCopies as availableCopies initially
+      price: formDataObj.get("price") as string,
     }
     mutation.mutate(parsedData)
   }
+  const categoryOptions = ["school", "intermediate", "business"]
   return (
     <div>
       <Modal
@@ -200,6 +233,21 @@ export const AddBookPopover = ({ open, handleClose }: { open: boolean; handleClo
 
               <div className="mt-2">
                 <Label htmlFor="category">Category</Label>
+                <Select value={formData.category} onValueChange={handleCategoryChange}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a category" />
+                  </SelectTrigger>
+                  <SelectContent position="popper" sideOffset={5} className="z-[1500]">
+                    {categoryOptions.map((category) => (
+                      <SelectItem key={category} value={category.toLowerCase()}>
+                        {category.charAt(0).toUpperCase() + category.slice(1)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              {/* <div className="mt-2">
+                <Label htmlFor="category">Category</Label>
                 <Input
                   type="text"
                   name="category"
@@ -208,7 +256,7 @@ export const AddBookPopover = ({ open, handleClose }: { open: boolean; handleClo
                   onChange={handleChange}
                   placeholder="Enter Book Category..."
                 />
-              </div>
+              </div> */}
 
               <div className="mt-2">
                 <Label htmlFor="totalCopies">Total Copies</Label>
@@ -221,18 +269,6 @@ export const AddBookPopover = ({ open, handleClose }: { open: boolean; handleClo
                   placeholder="Enter Total Copies..."
                 />
               </div>
-
-              {/* <div className="mt-2">
-                <Label htmlFor="availableCopies">Available Copies</Label>
-                <Input
-                  type="number"
-                  name="availableCopies"
-                  id="availableCopies"
-                  value={formData.availableCopies}
-                  onChange={handleChange}
-                  placeholder="Enter Available Copies..."
-                />
-              </div> */}
 
               <div className="mt-2">
                 <Label htmlFor="price">Price</Label>
